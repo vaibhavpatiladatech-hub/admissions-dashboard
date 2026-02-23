@@ -261,23 +261,23 @@ body::before{
 /* ═══════════════════════════════════════════════════════
    DONUT CHART
 ═══════════════════════════════════════════════════════ */
-.donut-wrap{display:flex;align-items:center;gap:18px;}
-.donut-box{position:relative;flex-shrink:0;}
+.donut-wrap{display:flex;align-items:stretch;gap:24px;}
+.donut-box{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .donut-ctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
-.donut-num{font-size:24px;font-weight:900;line-height:1;letter-spacing:-.025em;}
-.donut-sub{font-size:8px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.14em;margin-top:3px;display:block;}
+.donut-num{font-size:32px;font-weight:900;line-height:1;letter-spacing:-.03em;}
+.donut-sub{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.14em;margin-top:4px;display:block;}
 /* SVG donut smooth transitions */
 #u1,#u2,#u3,#u4,#u5,#u6{
   transition:stroke-dasharray .6s cubic-bezier(.16,1,.3,1),stroke-dashoffset .6s cubic-bezier(.16,1,.3,1);
   will-change:stroke-dasharray,stroke-dashoffset;
 }
-.leg{flex:1;}
-.leg-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;}
-.leg-row:last-child{margin-bottom:0;}
-.leg-l{display:flex;align-items:center;gap:7px;}
-.leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
-.leg-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.72);}
-.leg-val{font-size:13px;font-weight:800;}
+.leg{flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.leg-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.leg-row:last-child{margin-bottom:0;border-bottom:none;padding-bottom:0;}
+.leg-l{display:flex;align-items:center;gap:9px;}
+.leg-dot{width:11px;height:11px;border-radius:4px;flex-shrink:0;}
+.leg-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.78);}
+.leg-val{font-size:15px;font-weight:800;}
 .univ-filter-tag{display:none;align-items:center;gap:6px;font-size:10px;font-weight:700;color:rgba(255,255,255,.45);margin-top:10px;}
 .univ-filter-tag.show{display:flex;}
 .univ-filter-name{color:#fff;}
@@ -688,7 +688,7 @@ body::before{
       <div class="card-head"><span class="card-title">University Split</span><span class="card-badge" id="ub-b">&#8212;</span></div>
       <div class="donut-wrap">
         <div class="donut-box">
-          <svg width="140" height="140" viewBox="0 0 100 100">
+          <svg width="200" height="200" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="13"/>
             <circle id="u1" cx="50" cy="50" r="38" fill="none" stroke-width="13" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
             <circle id="u2" cx="50" cy="50" r="38" fill="none" stroke-width="13" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
@@ -780,8 +780,8 @@ body::before{
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbzDv1IF3DtUDucu57R4aCAhRbUUqpwKSqhaOEaZ4CWl9kqoub3v0NR00SkZHj-PXfUx/exec';
-const CACHE_KEY  = 'hsd13_';   // bump to bust all cache
+const API = 'https://script.google.com/macros/s/AKfycbz46EuPTXpTVCY5uVFtuWUX1gEnD5ZqJRXpFON7Vvo0JhQQH9B0qTQvmLxIhhmppAK_/exec';
+const CACHE_KEY  = 'hsd9_';   // bump to bust all cache
 const MEM_TTL    = 5 * 60 * 1000;
 const DISK_TTL   = 5 * 60 * 1000;
 const RETRY_MS   = 20 * 1000;
@@ -917,17 +917,14 @@ function parseLocalDate(s){
   const d=new Date(s.replace(/-/g,'/')); return isNaN(d)?null:d;
 }
 function monWeekStart(dt){
-  // Returns Monday 00:00:00.000 of the week containing dt
-  const d = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 0, 0, 0, 0);
-  const dow = d.getDay(); // 0=Sun, 1=Mon ... 6=Sat
-  const diff = dow===0 ? -6 : 1-dow;  // days to subtract to get to Monday
-  d.setDate(d.getDate() + diff);
+  const d=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+  const dow=d.getDay();
+  d.setDate(d.getDate()+(dow===0?-6:1-dow));
   return d;
 }
 function sunWeekEnd(dt){
-  // Returns Sunday 23:59:59.999 of the week containing dt
-  const mon = monWeekStart(dt);
-  return new Date(mon.getFullYear(), mon.getMonth(), mon.getDate()+6, 23, 59, 59, 999);
+  const m=monWeekStart(dt);
+  return new Date(m.getFullYear(),m.getMonth(),m.getDate()+6);
 }
 function iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function fmtDisp(d){ return d?`${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)} ${d.getFullYear()}`:'—'; }
@@ -935,101 +932,73 @@ function dayTs(d){ return d?new Date(d.getFullYear(),d.getMonth(),d.getDate()).g
 const TODAY_TS = dayTs(new Date());
 
 // ═══════════════════════════════════════════════════════
-// WEEK RANGE HELPERS
-// Returns {mon, sun} for the correct Mon–Sun window
-// ═══════════════════════════════════════════════════════
-function getWeekRange(p){
-  const today = new Date();
-  if(p==='weekly'||p==='thisweek'){
-    const mon = monWeekStart(today);                                          // Mon 00:00:00
-    const sun = new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+6,23,59,59,999); // Sun 23:59:59
-    return {mon, sun};
-  }
-  if(p==='lastweek'){
-    const thisMon = monWeekStart(today);
-    const mon = new Date(thisMon.getFullYear(),thisMon.getMonth(),thisMon.getDate()-7,0,0,0,0);
-    const sun = new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+6,23,59,59,999);
-    return {mon, sun};
-  }
-  return null;
-}
-
-function inRange(dateStr, mon, sun){
-  const dt = parseLocalDate(dateStr);
-  if(!dt) return false;
-  // Use noon to avoid any DST edge cases
-  const d = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 12, 0, 0);
-  return d >= mon && d <= sun;
-}
-
-// ═══════════════════════════════════════════════════════
-// NORMALISE — called exactly once per fetch
+// NORMALISE — called exactly once per fetch, preserves all fields
 // ═══════════════════════════════════════════════════════
 function norm(raw, p){
-  if(!raw || raw.error) return null;
-  if(!Array.isArray(raw.trendRows)) raw.trendRows = [];
+  if(!raw||raw.error) return null;
+  if(!Array.isArray(raw.trendRows)) raw.trendRows=[];
 
-  // Preserve target fields
+  // Preserve target fields before any mutation
   const mgrTargets    = raw.mgrTargets    || {};
   const mgrTargetsAll = raw.mgrTargetsAll || {};
 
-  // ── Always keep the FULL unfiltered trendRows for counsellor/incentive ──
-  // counsellors show for the FULL period (all, month, week - whatever server sent)
-  raw.allTrendRows = raw.trendRows.slice();
-
   if(!raw.trendRows.length){
-    raw.others        = Math.max(0, raw.netAdm||0);
+    raw.others = Math.max(0,(raw.netAdm||0));
     raw.mgrTargets    = mgrTargets;
     raw.mgrTargetsAll = mgrTargetsAll;
     return raw;
   }
 
-  // ── Week filter: narrow trendRows to the correct Mon–Sun window ──
-  const weekRange = getWeekRange(p);
-  const filteredRows = weekRange
-    ? raw.trendRows.filter(r => inRange(r.date, weekRange.mon, weekRange.sun))
-    : raw.trendRows;
+  // Recount from trendRows (authoritative)
+  const mgr  = {deepesh:0,aslam:0,aasif:0,manas:0};
+  const tl   = {tlAkshay:0,tlKajal:0,tlDevashis:0,tlAntaryami:0,tlManas:0};
+  const univ = {alliance:0,amity:0,chandigarh:0,presidency:0,cvRaman:0,gift:0,centurion:0,driems:0};
+  let count=0;
 
-  // ── Replace trendRows with filtered set (used by trend chart + bar counts) ──
-  raw.trendRows = filteredRows;
+  let rows = raw.trendRows;
+  // For thisweek: keep only current Mon-Sun window
+  if(p==='weekly'||p==='thisweek'){
+    const dates = rows.map(r=>parseLocalDate(r.date)).filter(Boolean);
+    if(dates.length){
+      const mx = dates.reduce((a,b)=>a>b?a:b);
+      const mon=monWeekStart(mx), sun=sunWeekEnd(mx);
+      rows = rows.filter(r=>{ const dt=parseLocalDate(r.date); return dt&&dt>=mon&&dt<=sun; });
+    }
+  }
 
-  // ── Recount from filtered rows ──
-  const mgr  = {deepesh:0, aslam:0, aasif:0, manas:0};
-  const tl   = {tlAkshay:0, tlKajal:0, tlDevashis:0, tlAntaryami:0, tlManas:0};
-  const univ = {alliance:0, amity:0, chandigarh:0, presidency:0, cvRaman:0, gift:0, centurion:0, driems:0};
-  let count = 0;
-
-  for(let i=0, L=filteredRows.length; i<L; i++){
-    const r = filteredRows[i];
+  for(let i=0,L=rows.length;i<L;i++){
+    const r=rows[i];
+    // Manager
     switch((r.mgr||'').trim().toLowerCase()){
       case 'deepesh': mgr.deepesh++; break;
       case 'aslam':   mgr.aslam++;   break;
       case 'aasif':   mgr.aasif++;   break;
       case 'manas':   mgr.manas++;   break;
     }
-    const tR = (r.tl||'').trim().toLowerCase();
-    if     (tR==='akshay')                         tl.tlAkshay++;
-    else if(tR==='kajal')                          tl.tlKajal++;
-    else if(tR==='devashis'||tR==='devashish')     tl.tlDevashis++;
-    else if(tR==='antaryami')                      tl.tlAntaryami++;
-    else if(tR==='manas')                          tl.tlManas++;
-    const uR = (r.univ||'').trim().toLowerCase();
-    if     (uR.includes('alliance'))               univ.alliance++;
-    else if(uR.includes('amity'))                  univ.amity++;
-    else if(uR.includes('chandigarh'))             univ.chandigarh++;
-    else if(uR.includes('presidency'))             univ.presidency++;
-    else if(uR.includes('raman'))                  univ.cvRaman++;
-    else if(uR.includes('gift'))                   univ.gift++;
-    else if(uR.includes('centurion'))              univ.centurion++;
-    else if(uR.includes('driems'))                 univ.driems++;
+    // TL
+    const tR=(r.tl||'').trim().toLowerCase();
+    if(tR==='akshay')                          tl.tlAkshay++;
+    else if(tR==='kajal')                      tl.tlKajal++;
+    else if(tR==='devashis'||tR==='devashish') tl.tlDevashis++;
+    else if(tR==='antaryami')                  tl.tlAntaryami++;
+    else if(tR==='manas')                      tl.tlManas++;
+    // University
+    const uR=(r.univ||'').trim().toLowerCase();
+    if(uR.includes('alliance'))        univ.alliance++;
+    else if(uR.includes('amity'))      univ.amity++;
+    else if(uR.includes('chandigarh')) univ.chandigarh++;
+    else if(uR.includes('presidency')) univ.presidency++;
+    else if(uR.includes('raman'))      univ.cvRaman++;
+    else if(uR.includes('gift'))       univ.gift++;
+    else if(uR.includes('centurion'))  univ.centurion++;
+    else if(uR.includes('driems'))     univ.driems++;
     count++;
   }
 
-  Object.assign(raw, mgr, tl, univ);
-  if(count > 0) raw.netAdm = count;
-  const kn = (raw.alliance||0)+(raw.amity||0)+(raw.chandigarh||0)+(raw.presidency||0)
-           + (raw.cvRaman||0)+(raw.gift||0)+(raw.centurion||0)+(raw.driems||0);
-  raw.others        = Math.max(0, (raw.netAdm||0) - kn);
+  Object.assign(raw,mgr,tl,univ);
+  if(count>0) raw.netAdm=count;
+  const kn=(raw.alliance||0)+(raw.amity||0)+(raw.chandigarh||0)+(raw.presidency||0)+(raw.cvRaman||0)+(raw.gift||0)+(raw.centurion||0)+(raw.driems||0);
+  raw.others     = Math.max(0,(raw.netAdm||0)-kn);
   raw.mgrTargets    = mgrTargets;
   raw.mgrTargetsAll = mgrTargetsAll;
   return raw;
@@ -1050,101 +1019,106 @@ async function fetchOne(p, from, to){
 // ═══════════════════════════════════════════════════════
 // LOAD — race-safe, instant-from-cache
 // ═══════════════════════════════════════════════════════
+
+// Track every in-flight fetch so tab switches can ignore stale completions
+let _inFlight = Object.create(null); // ck → AbortController (not used, just tracks)
+
 async function load(p, from=null, to=null, force=false){
   clearTimeout(refreshTimer);
-  const ck       = from?`cr_${from}_${to}`:p;
-  const isCustom = !!from;
-  const token    = ++renderToken;
 
+  const ck       = from ? `cr_${from}_${to}` : p;
+  const isCustom = !!from;
+  const token    = ++renderToken;   // SINGLE source of truth — every async path checks this
+
+  // Helper: only renders if this is still the latest request
   function safeRender(data, stale){
-    if(token!==renderToken) return;  // stale — newer request in flight
+    if(token !== renderToken) return;
     activeCk     = ck;
     activePeriod = p;
     render(data, stale, p);
   }
 
-  // 1. Memory hit — instant
-  if(!force && mem[ck] && (Date.now()-mem[ck].ts)<MEM_TTL){
+  // 1. Memory hit — instant, no flicker
+  if(!force && mem[ck] && (Date.now()-mem[ck].ts) < MEM_TTL){
     safeRender(mem[ck].data, true);
-    if(!isCustom) schedRefresh(ck,p,from,to,token);
+    if(!isCustom) schedRefresh(ck, p, from, to);
     return;
   }
 
-  // 2. Disk hit — render immediately, refresh silently
-  const dk=dkRead(ck);
+  // 2. Disk hit — render immediately, then refresh silently in background
+  const dk = dkRead(ck);
   if(dk){
-    mem[ck]={data:dk.data,ts:dk.ts};
+    mem[ck] = {data:dk.data, ts:dk.ts};
     safeRender(dk.data, true);
     showDash();
-    fetchOne(p,from,to).then(d=>{
-      if(!d||token!==renderToken) return;
-      mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-      safeRender(d,false);
-      if(!isCustom) schedRefresh(ck,p,from,to,token);
+    // Background refresh — always re-check token on completion
+    fetchOne(p, from, to).then(d=>{
+      if(!d || token !== renderToken) return;   // tab switched while fetching — discard
+      mem[ck] = {data:d, ts:Date.now()};
+      dkWrite(ck, d);
+      safeRender(d, false);
+      if(!isCustom) schedRefresh(ck, p, from, to);
     }).catch(()=>{});
     return;
   }
 
-  // 3. Cold fetch
+  // 3. Cold fetch — nothing cached at all
   setSt('⚡ Fetching…');
   try{
-    const d=await fetchOne(p,from,to);
-    if(token!==renderToken) return;
+    const d = await fetchOne(p, from, to);
+    if(token !== renderToken) return;           // tab switched while fetching — discard
     if(!d){ setSt('⚠ No data'); showDash(); return; }
-    mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-    safeRender(d,false);
-    if(!isCustom) schedRefresh(ck,p,from,to,token);
+    mem[ck] = {data:d, ts:Date.now()};
+    dkWrite(ck, d);
+    safeRender(d, false);
+    if(!isCustom) schedRefresh(ck, p, from, to);
   }catch(e){
-    if(token!==renderToken) return;
+    if(token !== renderToken) return;
     setSt('⚠ Failed · retry 20s');
-    refreshTimer=setTimeout(()=>load(p,from,to,true),RETRY_MS);
+    refreshTimer = setTimeout(()=>load(p, from, to, true), RETRY_MS);
     showDash();
   }
 }
 
-function schedRefresh(ck,p,from,to,token){
+// Auto-refresh — always uses renderToken at fire time, never captures old token
+function schedRefresh(ck, p, from, to){
   clearTimeout(refreshTimer);
-  refreshTimer=setTimeout(()=>{
-    if(renderToken!==token) return;
-    fetchOne(p,from,to).then(d=>{
-      if(!d||renderToken!==token) return;
-      mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-      render(d,false,p);
-      schedRefresh(ck,p,from,to,token);
-    }).catch(()=>{ if(renderToken===token) schedRefresh(ck,p,from,to,token); });
+  refreshTimer = setTimeout(()=>{
+    // Capture the token NOW (at fire time), not at schedule time
+    const tokenAtFire = renderToken;
+    fetchOne(p, from, to).then(d=>{
+      // Re-check: if user clicked a tab between schedule and resolve, abort
+      if(!d || renderToken !== tokenAtFire) return;
+      mem[ck] = {data:d, ts:Date.now()};
+      dkWrite(ck, d);
+      // Use activeCk to confirm the displayed tab hasn't changed
+      if(activeCk === ck){
+        render(d, false, p);
+      }
+      schedRefresh(ck, p, from, to);
+    }).catch(()=>{
+      // Network failed — retry refresh cycle only if still on same tab
+      if(renderToken === tokenAtFire) schedRefresh(ck, p, from, to);
+    });
   }, MEM_TTL);
 }
 
 function prefetchAll(){
-  // Standard tabs
-  ['all','today','monthly'].forEach(p=>{
+  // Prefetch all standard tabs silently — never overwrite the active tab render
+  ['all','today','weekly','monthly'].forEach(p=>{
     if(mem[p]) return;
     const dk=dkRead(p);
     if(dk){ mem[p]={data:dk.data,ts:dk.ts}; return; }
     fetchOne(p,null,null).then(d=>{
       if(!d) return;
       mem[p]={data:d,ts:Date.now()}; dkWrite(p,d);
-      if(activeCk===p) render(d,false,p);
+      // Only paint if this tab is currently active AND no newer load() is pending
+      // Use activeCk (not p) to handle weekly/thisweek aliasing
+      if(activeCk===p && !document.hidden) render(d,false,p);
     }).catch(()=>{});
   });
-  // This week — always pass explicit Mon–Sun dates
-  {
-    const n=new Date(); n.setHours(0,0,0,0);
-    const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
-    const wf=iso(wMon), wt=iso(wSun), wCk=`cr_${wf}_${wt}`;
-    if(!mem[wCk]){
-      const dk=dkRead(wCk);
-      if(dk){ mem[wCk]={data:dk.data,ts:dk.ts}; }
-      else {
-        fetchOne('weekly',wf,wt).then(d=>{
-          if(!d) return;
-          mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d);
-          if(activeCk===wCk) render(d,false,'weekly');
-        }).catch(()=>{});
-      }
-    }
-  }
-  // Last week
+
+  // Last week — needs exact date range
   const n=new Date(); n.setHours(0,0,0,0);
   const thisMon=monWeekStart(n);
   const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
@@ -1156,7 +1130,7 @@ function prefetchAll(){
     fetchOne('lastweek',lf,lt).then(d=>{
       if(!d) return;
       mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d);
-      if(activeCk===lwCk) render(d,false,'lastweek');
+      if(activeCk===lwCk && !document.hidden) render(d,false,'lastweek');
     }).catch(()=>{});
   }
 }
@@ -1328,10 +1302,8 @@ function render(d, stale, p){
   });
 
   // ── Trend + Counsellor ──────────────────────────────
-  // lastTrendRows = week-filtered (for trend chart & donut)
-  // allTrendRows  = full period (for counsellor grid & incentive leaderboard)
   drawTrend(lastTrendRows);
-  drawCounsel(d.allTrendRows || d.trendRows || []);
+  drawCounsel(lastTrendRows);
   showDash();
 }
 
@@ -1451,14 +1423,40 @@ function fmtKey(k,mode){
   return p[2]+' '+MO_SHORT[+p[1]-1];
 }
 
+// Trend tooltip state — module-level so we don't re-add listeners
+let _trendPts=[], _trendXOf=null, _trendYOf=null, _trendW=900;
+(function initTrendListeners(){
+  // Single persistent listeners on the SVG element — never cloned, never re-added
+  const svgEl=document.getElementById('chartSvg');
+  const tip=document.getElementById('chartTip');
+  svgEl.addEventListener('mouseover',e=>{
+    const h=e.target.closest('.thit'); if(!h||!_trendPts.length)return;
+    const i=+h.dataset.i; if(i<0||i>=_trendPts.length)return;
+    const pt=_trendPts[i];
+    svgEl.querySelectorAll('.tdot').forEach((d,j)=>d.setAttribute('r',j===i?'6':'4'));
+    tip.style.opacity='1';
+    document.getElementById('ttDate').textContent=fmtKey(pt[0],trendFilter);
+    document.getElementById('ttVal').textContent=pt[1]+' admissions';
+    const x=_trendXOf(i), tipW=tip.offsetWidth||130;
+    let tx=x-tipW/2; if(tx<0)tx=2; if(tx+tipW>_trendW)tx=_trendW-tipW-2;
+    tip.style.left=tx+'px';
+    const y=_trendYOf(pt[1]);
+    tip.style.top=(y-56<0?y+10:y-56)+'px';
+  },{passive:true});
+  svgEl.addEventListener('mouseleave',()=>{
+    if(tip) tip.style.opacity='0';
+    svgEl.querySelectorAll('.tdot').forEach(d=>d.setAttribute('r','4'));
+  },{passive:true});
+})();
+
 function drawTrend(rows){
   const wrap=$('chartWrap'), svg=$('chartSvg'), tip=$('chartTip'), stats=$('trendStats');
-  if(!rows.length){
+  if(!rows||!rows.length){
     svg.innerHTML=`<text x="50%" y="50%" fill="rgba(255,255,255,.1)" text-anchor="middle" font-size="12" font-family="Plus Jakarta Sans">No trend data</text>`;
-    stats.innerHTML=''; return;
+    stats.innerHTML=''; _trendPts=[]; return;
   }
   const pts=groupRows(rows,trendFilter);
-  if(!pts.length){ svg.innerHTML=''; stats.innerHTML=''; return; }
+  if(!pts.length){ svg.innerHTML=''; stats.innerHTML=''; _trendPts=[]; return; }
 
   const vals=pts.map(p=>p[1]);
   const total=vals.reduce((a,b)=>a+b,0);
@@ -1476,53 +1474,65 @@ function drawTrend(rows){
     `<div class="tstat ${trendPct>=0?'up':'dn'}"><div class="tstat-val">${trendPct>=0?'+':''}${trendPct}%</div><div class="tstat-lbl">TREND</div></div>`,
   ].join('');
 
-  const W=wrap.offsetWidth||900, H=200;
-  const pL=38, pR=16, pT=20, pB=36;
+  // Use clientWidth for accurate width after layout; fall back to 900
+  const W=wrap.clientWidth||wrap.offsetWidth||900, H=200;
+  const pL=42, pR=20, pT=20, pB=36;
   const cW=W-pL-pR, cH=H-pT-pB;
   const maxV=Math.max(...vals,1), n=pts.length;
   const xOf=i=>pL+(n===1?cW/2:i*(cW/(n-1)));
   const yOf=v=>pT+cH-(v/maxV)*cH;
+
+  // Store for tooltip handler
+  _trendPts=[...pts]; _trendXOf=xOf; _trendYOf=yOf; _trendW=W;
 
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
 
   // Grid lines
   let grid='';
   [0,.25,.5,.75,1].forEach(t=>{
-    const y=pT+cH-t*cH;
-    grid+=`<line x1="${pL}" x2="${W-pR}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    grid+=`<text x="${pL-6}" y="${y+4}" fill="rgba(255,255,255,.2)" font-size="9" text-anchor="end" font-family="Plus Jakarta Sans">${Math.round(t*maxV)}</text>`;
+    const y=pT+cH-t*cH, v=Math.round(t*maxV);
+    grid+=`<line x1="${pL}" x2="${W-pR}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.055)" stroke-width="1"/>`;
+    grid+=`<text x="${pL-6}" y="${y+4}" fill="rgba(255,255,255,.2)" font-size="9" text-anchor="end" font-family="Plus Jakarta Sans">${v}</text>`;
   });
 
-  // Area + line path
+  // Area + smooth bezier line
   let area='', line='';
-  if(n>1){
+  if(n===1){
+    const x=xOf(0), y=yOf(pts[0][1]);
+    line=`M ${x} ${y}`;
+    area=`M ${x-10} ${H-pB} L ${x} ${y} L ${x+10} ${H-pB} Z`;
+  } else {
     area=`M ${xOf(0)} ${H-pB}`;
-    pts.forEach((_,i)=>area+=` L ${xOf(i)} ${yOf(pts[i][1])}`);
+    for(let i=0;i<n;i++) area+=` L ${xOf(i)} ${yOf(pts[i][1])}`;
     area+=` L ${xOf(n-1)} ${H-pB} Z`;
     line=`M ${xOf(0)} ${yOf(pts[0][1])}`;
     for(let i=1;i<n;i++){
-      const x0=xOf(i-1),y0=yOf(pts[i-1][1]),x1=xOf(i),y1=yOf(pts[i][1]),cx=(x0+x1)/2;
+      const x0=xOf(i-1),y0=yOf(pts[i-1][1]),x1=xOf(i),y1=yOf(pts[i][1]);
+      const cx=(x0+x1)/2;
       line+=` C ${cx} ${y0} ${cx} ${y1} ${x1} ${y1}`;
     }
   }
 
-  // X labels
-  const maxL=Math.min(n,8), step=Math.ceil(n/maxL);
+  // X-axis labels — evenly spaced, max 8
+  const step=Math.max(1,Math.ceil(n/8));
   let xlbls='', dots='', hits='';
-  pts.forEach((p,i)=>{
-    const x=xOf(i), y=yOf(p[1]);
-    if(i%step===0||i===n-1)
-      xlbls+=`<text x="${x}" y="${H-pB+15}" fill="rgba(255,255,255,.22)" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans">${fmtKey(p[0],trendFilter)}</text>`;
-    dots+=`<circle class="tdot" cx="${x}" cy="${y}" r="4" fill="#818cf8" stroke="#08091a" stroke-width="2" filter="url(#glow)" style="opacity:0;transition:opacity .2s ${i*15}ms"/>`;
-    const hw=n>1?Math.max(16,cW/(n-1)/2):cW;
-    hits+=`<rect x="${Math.max(pL,x-hw/2)}" y="${pT}" width="${hw}" height="${cH}" fill="transparent" data-i="${i}" class="thit" style="cursor:crosshair"/>`;
-  });
+  for(let i=0;i<n;i++){
+    const x=xOf(i), y=yOf(pts[i][1]);
+    if(i===0||i===n-1||i%step===0)
+      xlbls+=`<text x="${x}" y="${H-pB+14}" fill="rgba(255,255,255,.25)" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans">${fmtKey(pts[i][0],trendFilter)}</text>`;
+    dots+=`<circle class="tdot" cx="${x}" cy="${y}" r="4" fill="#818cf8" stroke="#08091a" stroke-width="2" style="opacity:0;transition:opacity .25s ${i*12}ms ease,r .15s ease"/>`;
+    const hw=n>1?Math.max(20,(cW/(n-1))/2):cW/2;
+    const rx=Math.max(pL,x-hw);
+    hits+=`<rect x="${rx}" y="${pT}" width="${Math.min(hw*2,W-rx-pR)}" height="${cH+4}" fill="transparent" data-i="${i}" class="thit" style="cursor:crosshair"/>`;
+  }
 
-  const pathLen=2200;
+  // Compute a safe path length (rough estimate: n * avg segment + buffer)
+  const pathLen=Math.max(3000, n*60);
+
   svg.innerHTML=`
     <defs>
       <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#818cf8" stop-opacity="0.28"/>
+        <stop offset="0%" stop-color="#818cf8" stop-opacity="0.25"/>
         <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
       </linearGradient>
       <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
@@ -1530,45 +1540,18 @@ function drawTrend(rows){
         <stop offset="55%" stop-color="#818cf8"/>
         <stop offset="100%" stop-color="#22d3ee"/>
       </linearGradient>
-      <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     </defs>
     ${grid}
-    ${n>1?`<path d="${area}" fill="url(#tg)"/>
-    <path id="tline" d="${line}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"
-      style="stroke-dasharray:${pathLen};stroke-dashoffset:${pathLen};transition:stroke-dashoffset 1.1s cubic-bezier(.16,1,.3,1)"/>`:'' }
+    <path d="${area}" fill="url(#tg)"/>
+    <path id="tline" d="${line}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+      style="stroke-dasharray:${pathLen};stroke-dashoffset:${pathLen};transition:stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1)"/>
     ${xlbls}${dots}${hits}`;
 
-  // Animate line draw
+  // Animate: double RAF to ensure browser paints before we change dashoffset
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    const tl=$f('tline'); if(tl) tl.style.strokeDashoffset=0;
+    const tl=$f('tline'); if(tl) tl.style.strokeDashoffset='0';
     svg.querySelectorAll('.tdot').forEach(d=>d.style.opacity='1');
   }));
-
-  // Tooltip — remove old listeners by cloning
-  const newSvg=svg.cloneNode(true);
-  svg.parentNode.replaceChild(newSvg,svg);
-  const liveSvg=$('chartSvg');
-
-  liveSvg.addEventListener('mouseover',e=>{
-    const h=e.target.closest('.thit'); if(!h)return;
-    const i=+h.dataset.i, pt=pts[i];
-    const dot=liveSvg.querySelectorAll('.tdot')[i];
-    if(dot) dot.setAttribute('r','6');
-    tip.style.opacity='1';
-    $('ttDate').textContent=fmtKey(pt[0],trendFilter);
-    $('ttVal').textContent=pt[1]+' admissions';
-    const x=xOf(i), tipW=tip.offsetWidth||130;
-    let tx=x-tipW/2; if(tx<0)tx=2; if(tx+tipW>W)tx=W-tipW-2;
-    tip.style.left=tx+'px';
-    tip.style.top=(yOf(pt[1])-56<0?yOf(pt[1])+10:yOf(pt[1])-56)+'px';
-  },{passive:true});
-
-  liveSvg.addEventListener('mouseout',e=>{
-    const h=e.target.closest('.thit'); if(!h)return;
-    const dot=liveSvg.querySelectorAll('.tdot')[+h.dataset.i];
-    if(dot) dot.setAttribute('r','4');
-    tip.style.opacity='0';
-  },{passive:true});
 
   const t4=$('t4'); if(t4) t4.textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 }
@@ -1586,59 +1569,61 @@ $('cSearch').addEventListener('input',function(){
 
 function drawCounsel(rows){
   const pod=$('cPodium'), grid=$('cGrid'), badge=$('cBadge');
-
-  // Build counsellor map from rows
-  const map = Object.create(null);
-  if(rows && rows.length){
-    for(let i=0, L=rows.length; i<L; i++){
-      const r = rows[i];
-      // Robust field detection — try every possible spelling
-      const raw = (
-        r.counsellor || r.Counsellor || r.COUNSELLOR ||
-        r.counsel    || r.Counsel    ||
-        r.staff      || r.Staff      ||
-        r.employee   || r.Employee   ||
-        r.name       || r.Name       || ''
-      ).toString().trim();
-      if(!raw || raw.toLowerCase()==='none' || raw==='-') continue;
-      // Normalise to Title Case
-      const key = raw.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
-      if(!map[key]) map[key] = {count:0, incentive:0};
-      map[key].count++;
-      // Incentive — scan all fields for numeric incentive value
-      let inc = 0;
-      const rkeys = Object.keys(r);
-      for(let j=0; j<rkeys.length; j++){
-        const kl = rkeys[j].toLowerCase();
-        if(kl.includes('incentive') || kl==='amount' || kl==='commission'){
-          const v = parseFloat(r[rkeys[j]]);
-          if(!isNaN(v) && v>0){ inc=v; break; }
-        }
-      }
-      map[key].incentive += inc;
-    }
+  if(!rows||!rows.length){
+    pod.innerHTML=''; grid.innerHTML=nd('No counsellor data'); badge.textContent='0'; return;
   }
 
-  const newData = Object.entries(map)
-    .map(([name,{count,incentive}])=>({name, count, incentive}))
+  const map=Object.create(null);
+  for(let i=0,L=rows.length;i<L;i++){
+    const r=rows[i];
+
+    // Robust field name resolution — try every possible variation
+    let raw='';
+    if(r.counsellor)         raw=r.counsellor;
+    else if(r.Counsellor)    raw=r.Counsellor;
+    else if(r.counselor)     raw=r.counselor;
+    else if(r.Counselor)     raw=r.Counselor;
+    else if(r.COUNSELLOR)    raw=r.COUNSELLOR;
+    else {
+      // Scan all keys for any that contain 'counsel'
+      const k=Object.keys(r).find(k=>k.toLowerCase().includes('counsel'));
+      if(k) raw=r[k];
+    }
+    raw=(raw||'').toString().trim();
+    if(!raw||raw.toLowerCase()==='none'||raw.toLowerCase()==='n/a'||raw==='-') continue;
+
+    // Normalize name: capitalize each word
+    const key=raw.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
+    if(!map[key]) map[key]={count:0,incentive:0};
+    map[key].count++;
+
+    // Robust incentive field resolution
+    let inc=0;
+    const rKeys=Object.keys(r);
+    for(let j=0;j<rKeys.length;j++){
+      const kl=rKeys[j].toLowerCase();
+      if(kl.includes('incentive')||kl==='amount'||kl==='inc'){
+        const v=parseFloat(r[rKeys[j]]);
+        if(!isNaN(v)&&v>0){ inc=v; break; }
+      }
+    }
+    map[key].incentive+=inc;
+  }
+
+  allCounselData=Object.entries(map)
+    .map(([name,{count,incentive}])=>({name,count,incentive}))
+    .filter(c=>c.count>0)
     .sort((a,b)=>b.count-a.count);
 
-  if(newData.length > 0){
-    // Good data — update global store and re-render
-    allCounselData = newData;
-  } else if(allCounselData.length > 0){
-    // No new data but we have old data — keep showing it (avoids blank on refresh)
-    // Fall through to render with existing allCounselData
-  } else {
-    // Truly no data at all
+  if(!allCounselData.length){
     pod.innerHTML=''; grid.innerHTML=nd('No counsellor data'); badge.textContent='0'; return;
   }
 
   badge.textContent='ALL '+allCounselData.length+' COUNSELLORS';
 
-  // Podium
+  // Podium top 3
   const pIco=['🥇','🥈','🥉'], pCls=['p1','p2','p3'], pLbl=['TOP PERFORMER','2ND PLACE','3RD PLACE'];
-  pod.innerHTML=allCounselData.slice(0,3).map((c,i)=>
+  pod.innerHTML=allCounselData.slice(0,Math.min(3,allCounselData.length)).map((c,i)=>
     `<div class="c-pod ${pCls[i]}"><span class="c-pod-ico">${pIco[i]}</span><div class="c-pod-body"><span class="c-pod-name" title="${c.name}">${c.name}</span><span class="c-pod-lbl">${pLbl[i]}</span></div><div class="c-pod-stats"><span class="c-pod-num">${c.count}</span>${c.incentive>0?`<span class="c-pod-inc">₹${fmtInc(c.incentive)}</span>`:''}</div></div>`
   ).join('');
 
@@ -1716,10 +1701,39 @@ function drawIncLeaderboard(data){
 $q('.tabs').addEventListener('click',e=>{
   const t=e.target.closest('.tab');
   if(!t||t.classList.contains('on')) return;
+
+  // Instant UI feedback — switch tab highlight immediately
   $q('.tab.on')?.classList.remove('on');
   t.classList.add('on');
   clearRange();
+
   const p=t.getAttribute('data-p');
+
+  // If we already have this data in memory — render instantly, zero delay
+  const ckForTab = (p==='lastweek') ? (() => {
+    const n=new Date(); n.setHours(0,0,0,0);
+    const thisMon=monWeekStart(n);
+    const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
+    const lSun=new Date(lMon); lSun.setDate(lSun.getDate()+6);
+    return `cr_${iso(lMon)}_${iso(lSun)}`;
+  })() : (p==='thisweek' ? 'weekly' : p);
+
+  const cached = mem[ckForTab];
+  if(cached && (Date.now()-cached.ts) < MEM_TTL){
+    // Paint immediately from memory — no async, no flicker
+    activeCk = ckForTab;
+    activePeriod = p;
+    render(cached.data, true, p);
+    // Still kick off a background refresh
+    if(p!=='lastweek' && p!=='thisweek'){
+      schedRefresh(ckForTab, p, null, null);
+    }
+    return;
+  }
+
+  // No cache — show spinner in status bar immediately so user knows something is happening
+  setSt('⚡ Loading ' + t.textContent.trim() + '…');
+
   if(p==='lastweek'){
     const n=new Date(); n.setHours(0,0,0,0);
     const thisMon=monWeekStart(n);
@@ -1727,11 +1741,7 @@ $q('.tabs').addEventListener('click',e=>{
     const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
     load('lastweek', iso(lMon), iso(lSun));
   } else if(p==='thisweek'){
-    // Pass today's Mon–Sun explicitly so Apps Script also filters correctly
-    const n=new Date(); n.setHours(0,0,0,0);
-    const wMon=monWeekStart(n);
-    const wSun=sunWeekEnd(n);
-    load('weekly', iso(wMon), iso(wSun));
+    load('weekly');
   } else {
     load(p);
   }
@@ -1891,10 +1901,17 @@ $('univFilterX').addEventListener('click',()=>{
   updateDonut(c.data,lastTrendRows);
 },{passive:true});
 
-// ═══════════════════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════════════════
+// ── BOOT ─────────────────────────────────────────────
 (function boot(){
+  // Redraw trend when window resizes (fixes width=0 on first paint)
+  if(window.ResizeObserver){
+    new ResizeObserver(()=>{
+      if(lastTrendRows.length) drawTrend(lastTrendRows);
+    }).observe($('chartWrap'));
+  } else {
+    window.addEventListener('resize',()=>{ if(lastTrendRows.length) drawTrend(lastTrendRows); },{passive:true});
+  }
+
   // Instant render from disk if available
   const dk=dkRead('all');
   if(dk){
