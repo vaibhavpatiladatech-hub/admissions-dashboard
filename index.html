@@ -781,7 +781,7 @@ body::before{
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
 const API = 'https://script.google.com/macros/s/AKfycbz46EuPTXpTVCY5uVFtuWUX1gEnD5ZqJRXpFON7Vvo0JhQQH9B0qTQvmLxIhhmppAK_/exec';
-const CACHE_KEY  = 'hsd9_';   // bump to bust all cache
+const CACHE_KEY  = 'hsd10_';  // bump to bust all cache
 const MEM_TTL    = 5 * 60 * 1000;
 const DISK_TTL   = 5 * 60 * 1000;
 const RETRY_MS   = 20 * 1000;
@@ -799,6 +799,7 @@ const TLS = Object.freeze([
   {n:'Devashis',  k:'tlDevashis',  c:'c2'},
   {n:'Antaryami', k:'tlAntaryami', c:'c3'},
   {n:'Manas',     k:'tlManas',     c:'c4'},
+  {n:'Ruthvik',   k:'tlRuthvik',   c:'c3'},
 ]);
 const UNIVS = Object.freeze([
   {n:'Alliance',   k:'alliance',   cl:'#22d3ee'},
@@ -951,7 +952,7 @@ function norm(raw, p){
 
   // Recount from trendRows (authoritative)
   const mgr  = {deepesh:0,aslam:0,aasif:0,manas:0};
-  const tl   = {tlAkshay:0,tlKajal:0,tlDevashis:0,tlAntaryami:0,tlManas:0};
+  const tl   = {tlAkshay:0,tlKajal:0,tlDevashis:0,tlAntaryami:0,tlManas:0,tlRuthvik:0};
   const univ = {alliance:0,amity:0,chandigarh:0,presidency:0,cvRaman:0,gift:0,centurion:0,driems:0};
   let count=0;
 
@@ -982,6 +983,7 @@ function norm(raw, p){
     else if(tR==='devashis'||tR==='devashish') tl.tlDevashis++;
     else if(tR==='antaryami')                  tl.tlAntaryami++;
     else if(tR==='manas')                      tl.tlManas++;
+    else if(tR==='ruthvik')                    tl.tlRuthvik++;
     // University
     const uR=(r.univ||'').trim().toLowerCase();
     if(uR.includes('alliance'))        univ.alliance++;
