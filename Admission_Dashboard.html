@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>higher.study · Admissions Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="dns-prefetch" href="https://script.googleusercontent.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -13,15 +15,35 @@
 ═══════════════════════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#08091a;
-  --card:rgba(255,255,255,.05);
-  --brd:rgba(255,255,255,.08);
-  --accent:#c94e2d;
-  --accent2:#e07050;
-  --font:'Plus Jakarta Sans',sans-serif;
+  --bg:#07080f;
+  --bg2:#0d0e1c;
+  --card:rgba(255,255,255,.04);
+  --card2:rgba(255,255,255,.07);
+  --brd:rgba(255,255,255,.07);
+  --brd2:rgba(255,255,255,.14);
+  --accent:#e8512a;
+  --accent2:#ff7a50;
+  --accent3:#ffd166;
+  --teal:#06d6a0;
+  --indigo:#7c6cfc;
+  --font:'DM Sans',sans-serif;
+  --font-display:'Syne',sans-serif;
+  --shadow:0 8px 32px rgba(0,0,0,.45);
+  --shadow-sm:0 2px 12px rgba(0,0,0,.3);
+  --r:14px;
+  --r-sm:8px;
 }
 html{scroll-behavior:smooth;overscroll-behavior:none;}
 body{-webkit-overflow-scrolling:touch;}
+/* Mesh gradient background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232,81,42,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(124,108,252,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(6,214,160,.04) 0%, transparent 70%);
+  pointer-events:none;
+}
 body{
   font-family:var(--font);
   background:var(--bg);
@@ -48,7 +70,7 @@ body::before{
   position:fixed;inset:0;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   z-index:9999;gap:14px;
-  transition:opacity .4s ease;
+  transition:opacity .25s ease;
 }
 #ldr.out{opacity:0;pointer-events:none;}
 .ldr-ring{
@@ -188,7 +210,7 @@ body::before{
 /* ═══════════════════════════════════════════════════════
    MANAGER / TL BARS
 ═══════════════════════════════════════════════════════ */
-.barlist{display:flex;flex-direction:column;gap:10px;}
+.barlist{display:flex;flex-direction:column;gap:8px;contain:layout;min-height:200px;padding:4px 0;}
 .br-wrap{display:flex;flex-direction:column;gap:3px;}
 
 .br{
@@ -201,14 +223,25 @@ body::before{
 .br.active-mgr .bf{box-shadow:0 0 0 2px rgba(255,255,255,.35) inset;}
 .br.dimmed{opacity:.25;}
 
-.bn{width:74px;font-size:13px;font-weight:700;flex-shrink:0;color:rgba(255,255,255,.85);}
+.bn{width:74px;font-size:13px;font-weight:700;flex-shrink:0;color:rgba(255,255,255,.9);letter-spacing:-.01em;}
 .bt{flex:1;height:32px;position:relative;}
 .bt-bg{position:absolute;inset:0;background:rgba(255,255,255,.055);border-radius:8px;}
 .bf{
   position:absolute;top:0;left:0;height:100%;width:100%;
   border-radius:8px;transform:scaleX(0);transform-origin:left;
-  transition:transform .85s cubic-bezier(.16,1,.3,1);
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
   will-change:transform;
+}
+/* Shimmer on bar fill */
+.bf::after{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.08) 50%,transparent 100%);
+  transform:translateX(-100%);
+  animation:barShimmer 2.5s ease infinite;
+}
+@keyframes barShimmer{
+  0%{transform:translateX(-100%);}
+  60%,100%{transform:translateX(100%);}
 }
 .bl{
   position:absolute;top:50%;left:10px;transform:translateY(-50%);
@@ -219,14 +252,14 @@ body::before{
   white-space:nowrap;pointer-events:none;z-index:5;
   backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
-.bv{width:32px;text-align:right;font-size:13px;font-weight:800;color:rgba(255,255,255,.4);flex-shrink:0;}
+.bv{width:36px;text-align:right;font-size:14px;font-weight:800;color:rgba(255,255,255,.55);flex-shrink:0;font-variant-numeric:tabular-nums;}
 
 /* Bar colors */
-.c1{background:linear-gradient(90deg,#3730a3,#818cf8);}
-.c2{background:linear-gradient(90deg,#0e7490,#22d3ee);}
-.c3{background:linear-gradient(90deg,#5b21b6,#c084fc);}
-.c4{background:linear-gradient(90deg,#065f46,#34d399);}
-.c5{background:linear-gradient(90deg,#9d174d,#f472b6);}
+.c1{background:linear-gradient(90deg,#4338ca,#818cf8,#a5b4fc);}
+.c2{background:linear-gradient(90deg,#0891b2,#22d3ee,#67e8f9);}
+.c3{background:linear-gradient(90deg,#6d28d9,#a78bfa,#c4b5fd);}
+.c4{background:linear-gradient(90deg,#047857,#34d399,#6ee7b7);}
+.c5{background:linear-gradient(90deg,#be185d,#f472b6,#f9a8d4);}
 
 /* Target bar */
 .br-target{
@@ -234,16 +267,16 @@ body::before{
   animation:fadeUp .2s ease both;
 }
 .br-target.show{display:flex;}
-.bn-tgt{width:74px;font-size:9px;font-weight:700;color:rgba(251,191,36,.55);flex-shrink:0;letter-spacing:.04em;text-transform:uppercase;}
+.bn-tgt{width:82px;font-size:10px;font-weight:800;color:rgba(251,191,36,.8);flex-shrink:0;letter-spacing:.04em;text-transform:uppercase;}
 .bt-tgt{
-  flex:1;height:13px;background:rgba(255,255,255,.04);
-  border-radius:4px;overflow:visible;position:relative;
-  border:1px solid rgba(255,255,255,.07);
+  flex:1;height:26px;background:rgba(255,255,255,.06);
+  border-radius:6px;overflow:hidden;position:relative;
+  border:1px solid rgba(255,255,255,.12);
 }
 .bf-tgt{
   height:100%;border-radius:4px;position:relative;
   transform:scaleX(0);transform-origin:left;
-  transition:transform .9s cubic-bezier(.16,1,.3,1);
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
   will-change:transform;
   background:repeating-linear-gradient(
     -45deg,
@@ -256,11 +289,16 @@ body::before{
   background:linear-gradient(90deg,rgba(251,191,36,.55),rgba(251,191,36,.15));
 }
 .bt-tgt-lbl{
-  position:absolute;right:6px;top:50%;transform:translateY(-50%);
-  font-size:9px;font-weight:800;color:rgba(251,191,36,.9);
-  letter-spacing:.04em;white-space:nowrap;pointer-events:none;z-index:2;
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:13px;font-weight:900;color:#fbbf24;
+  letter-spacing:.02em;white-space:nowrap;pointer-events:none;z-index:5;
+  text-shadow:0 1px 4px rgba(0,0,0,.9);
 }
-.bv-tgt{width:28px;text-align:right;font-size:10px;font-weight:800;color:rgba(251,191,36,.65);flex-shrink:0;}
+.bv-tgt{width:38px;text-align:right;font-size:14px;font-weight:900;color:#fbbf24;flex-shrink:0;}
+.bf-tgt-ach{position:absolute;top:0;left:0;height:100%;border-radius:6px;transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.16,1,.3,1);z-index:2;background:linear-gradient(90deg,#f59e0b,#fbbf24,#fde68a);box-shadow:0 0 12px rgba(251,191,36,.3);}
+.bf-tgt-ach.over{background:linear-gradient(90deg,#16a34a,#22c55e,#86efac);box-shadow:0 0 12px rgba(34,197,94,.3);}
+.bf-tgt-ach.near{background:linear-gradient(90deg,rgba(251,191,36,.9),rgba(251,191,36,.5));}
+.bf-tgt-ach.low{background:linear-gradient(90deg,#dc2626,#ef4444,#fca5a5);box-shadow:0 0 10px rgba(239,68,68,.25);}
 
 /* ═══════════════════════════════════════════════════════
    DONUT CHART — fills full card height, no dead space
@@ -301,7 +339,8 @@ body::before{
   letter-spacing:.15em;margin-top:5px;display:block;text-transform:uppercase;
 }
 #u1,#u2,#u3,#u4,#u5,#u6{
-  transition:stroke-dasharray .55s cubic-bezier(.16,1,.3,1),
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.08));
+  transition:stroke-dasharray .4s cubic-bezier(.16,1,.3,1),
              stroke-dashoffset .55s cubic-bezier(.16,1,.3,1);
   will-change:stroke-dasharray,stroke-dashoffset;
 }
@@ -447,7 +486,7 @@ body::before{
   display:flex;align-items:center;gap:8px;
   padding:10px 12px;border-radius:10px;
   border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.025));
   transition:transform .15s ease,box-shadow .15s ease;
   cursor:default;
 }
@@ -633,7 +672,7 @@ body::before{
   animation:skelShimmer 1.5s infinite;
   border-radius:6px;
 }
-@keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+}
 
 /* Number counter animation */
 @keyframes countUp{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
@@ -645,6 +684,106 @@ body::before{
 .card,.full-card{contain:layout style;}
 .wrap{contain:layout;}
 .bt,.inc-track{isolation:isolate;}
+::selection{background:rgba(232,81,42,.3);color:#fff;}
+
+/* ── Premium additions ───────────────────────────────── */
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22);}
+
+/* Selection */
+::selection{background:rgba(232,81,42,.3);color:#fff;}
+
+/* Card top shimmer line */
+.card::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+  pointer-events:none;z-index:1;
+}
+
+/* Tab container pill */
+.tabs{
+  display:flex;gap:3px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:26px;padding:3px;
+}
+
+/* KPI net ADM accent */
+#kpi-net .kpi-lbl{color:var(--accent2);}
+
+/* Legend dot pulse on hover */
+.leg-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  transition:transform .2s,box-shadow .2s;
+}
+.leg-row:hover .leg-dot{transform:scale(1.3);box-shadow:0 0 8px currentColor;}
+
+/* Bar bg subtle texture */
+.bt-bg{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.04);
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+/* Card badge glow on data */
+.card-badge{transition:background .2s,color .2s;}
+
+/* Trend chart area upgrade */
+.trend-card .card-title{font-family:var(--font-display);}
+
+/* Counsellor section title */
+.cg-section-title,.inc-title{font-family:var(--font-display);}
+
+/* Number count animation */
+.kpi-val{
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum';
+}
+
+/* Stat timestamp */
+.ts{font-size:10px;letter-spacing:.02em;opacity:.55;}
+
+/* Smooth all transitions */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+
+/* ── Skeleton loader ─────────────────────────────── */
+.skel-bar{
+  height:38px;border-radius:8px;width:100%;
+  background:rgba(255,255,255,.08);
+  position:relative;overflow:hidden;
+  margin-bottom:8px;flex-shrink:0;
+}
+.skel-bar::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,.15) 50%,
+    transparent 100%
+  );
+  animation:skelMove 1.4s ease infinite;
+}
+@keyframes skelMove{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(100%);}
+}
+
+  100%{background-position:-200% 0;}
+}
+
+/* Barlist skeleton container */
+.barlist:has(.skel-bar){
+  padding:12px 0;
+}
+/* Ensure skel-bar shows over dark backgrounds */
+.skel-bar{
+  isolation:isolate;
+}
 </style>
 </head>
 <body>
@@ -754,11 +893,14 @@ body::before{
   <div class="g2 f2">
     <div class="card">
       <div class="card-head"><span class="card-title">Manager Performance</span><span class="card-badge" id="mb-b">&#8212;</span></div>
-      <div class="barlist" id="mb"></div>
+      <div class="barlist" id="mb"><div class="skel-bar"></div>
+        <div class="skel-bar" style="width:72%"></div>
+        <div class="skel-bar" style="width:52%"></div>
+        <div class="skel-bar" style="width:35%"></div></div>
       <div class="ts-row"><span class="ts-dot"></span>&nbsp;<span id="t1" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.16)">&#8212;</span></div>
     </div>
     <div class="card univ-card">
-      <div class="card-head"><span class="card-title">University Split</span><span class="card-badge" id="ub-b">&#8212;</span></div>
+      <div class="card-head"><span class="card-title">Process Split</span><span class="card-badge" id="ub-b">&#8212;</span></div>
       <div class="donut-wrap">
         <div class="donut-box">
           <svg width="148" height="148" viewBox="0 0 100 100">
@@ -772,7 +914,12 @@ body::before{
           </svg>
           <div class="donut-ctr"><div class="donut-num" id="unum">&#8212;</div><span class="donut-sub" id="uSub">NET ADM</span></div>
         </div>
-        <div class="leg" id="uleg"></div>
+        <div class="leg" id="uleg"><div style="display:flex;flex-direction:column;gap:10px;padding:8px 0;width:100%;">
+  <div class="skel-bar" style="height:14px;border-radius:6px;"></div>
+  <div class="skel-bar" style="height:14px;width:80%;border-radius:6px;"></div>
+  <div class="skel-bar" style="height:14px;width:65%;border-radius:6px;"></div>
+  <div class="skel-bar" style="height:14px;width:50%;border-radius:6px;"></div>
+</div></div>
       </div>
       <div class="univ-filter-tag" id="univFilterTag">
         Showing: <span class="univ-filter-name" id="univFilterName"></span>
@@ -786,7 +933,10 @@ body::before{
   <div class="g2 f3">
     <div class="card">
       <div class="card-head"><span class="card-title">Team Leader Performance</span><span class="card-badge" id="tb-b">&#8212;</span></div>
-      <div class="barlist" id="tb"></div>
+      <div class="barlist" id="tb"><div class="skel-bar"></div>
+        <div class="skel-bar" style="width:72%"></div>
+        <div class="skel-bar" style="width:52%"></div>
+        <div class="skel-bar" style="width:35%"></div></div>
       <div class="ts-row"><span class="ts-dot"></span>&nbsp;<span id="t3" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.16)">&#8212;</span></div>
     </div>
     <div class="card">
@@ -858,37 +1008,20 @@ body::before{
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbzDv1IF3DtUDucu57R4aCAhRbUUqpwKSqhaOEaZ4CWl9kqoub3v0NR00SkZHj-PXfUx/exec';
-const CACHE_KEY  = 'hsd18_';   // bump to bust all cache
-const MEM_TTL    = 5 * 60 * 1000;
-const DISK_TTL   = 5 * 60 * 1000;
+const API = 'https://script.google.com/macros/s/AKfycbyklSSdFverJ8xb_GQDjcSTpfzjkVxnIpInpXURPjYng_aCwq2EfMCFzyVGZNiWT_6i/exec';
+const CACHE_KEY  = 'hs_v1_';    // stable key — only change on major updates
+const MEM_TTL    = 10 * 60 * 1000; // 10 min memory cache
+const DISK_TTL   = 30 * 60 * 1000; // 30 min disk cache — instant on refresh
 const RETRY_MS   = 20 * 1000;
 const DONUT_C    = 238.8;
 
-const MGRS = Object.freeze([
-  {n:'Deepesh',  k:'deepesh',  c:'c1'},
-  {n:'Aslam',    k:'aslam',    c:'c2'},
-  {n:'Aasif',    k:'aasif',    c:'c3'},
-  {n:'Manas',    k:'manas',    c:'c4'},
-]);
-const TLS = Object.freeze([
-  {n:'Akshay',    k:'tlAkshay',    c:'c1'},
-  {n:'Kajal',     k:'tlKajal',     c:'c5'},
-  {n:'Devashis',  k:'tlDevashis',  c:'c2'},
-  {n:'Antaryami', k:'tlAntaryami', c:'c3'},
-  {n:'Manas',     k:'tlManas',     c:'c4'},
-  {n:'Priyanka',  k:'tlPriyanka',  c:'c1'},
-  {n:'Ruthvik',   k:'tlRuthvik',   c:'c2'},
-  {n:'Bhakti',    k:'tlBhakti',    c:'c3'},
-]);
-const UNIVS = Object.freeze([
-  {n:'Alliance',   k:'alliance',   cl:'#22d3ee'},
-  {n:'Amity',      k:'amity',      cl:'#818cf8'},
-  {n:'Chandigarh', k:'chandigarh', cl:'#34d399'},
-  {n:'Presidency', k:'presidency', cl:'#fbbf24'},
-  {n:'CV Raman',   k:'cvRaman',    cl:'#f472b6'},
-  {n:'Others',     k:'others',     cl:'#475569'},
-]);
+// MGRS and TLS are built dynamically from sheet data
+let MGRS = [];
+let TLS  = [];
+const _MGR_COLORS = ['c1','c2','c3','c4','c5'];
+const _TL_COLORS  = ['c1','c5','c2','c3','c4'];
+let UNIVS = [];  // built dynamically from sheet Process column
+const _UCLR = ['#22d3ee','#818cf8','#34d399','#fbbf24','#f472b6','#fb923c','#60a5fa','#a78bfa','#6ee7b7','#fca5a5','#4ade80','#e879f9','#38bdf8','#fde047'];
 const MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MO_ABBR  = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 const MO_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -933,6 +1066,7 @@ function fmtInc(n){
 }
 function nd(msg){ return`<div class="nodata"><div class="ico">📭</div><p>${msg}</p></div>`; }
 function setSt(t){ const e=$('stxt'); if(e) e.innerHTML=t; }
+function setStLoading(){ setSt('⏳ Fetching data…'); }
 
 const _rgbaCache = Object.create(null);
 function rgba(hex,a){
@@ -959,6 +1093,9 @@ function showDash(){
 const _animRaf = new WeakMap();
 function animCount(el, target){
   if(!el) return;
+  // Skip animation if value already correct
+  if(el._animTarget===target && parseInt(el.textContent)===target) return;
+  el._animTarget = target;
   const start = parseInt(el.textContent)||0;
   if(start===target){ el.textContent=target; return; }
   const prev = _animRaf.get(el); if(prev) cancelAnimationFrame(prev);
@@ -986,28 +1123,36 @@ function dkRead(k){
   }catch{ return null; }
 }
 // Defer disk writes to idle — never blocks the main thread
-const _dkQ=Object.create(null); let _dkTimer=null;
-function dkWrite(k,data){
-  _dkQ[k]=data;
-  if(_dkTimer) return;
-  const flush=()=>{
-    _dkTimer=null;
-    for(const key of Object.keys(_dkQ)){
-      try{ localStorage.setItem(CACHE_KEY+key,JSON.stringify({data:_dkQ[key],ts:Date.now()})); }
-      catch{
-        // Storage full — evict oldest hsd key and retry
-        try{
-          const all=Object.keys(localStorage).filter(x=>x.startsWith(CACHE_KEY));
-          if(all.length) localStorage.removeItem(all[0]);
-          localStorage.setItem(CACHE_KEY+key,JSON.stringify({data:_dkQ[key],ts:Date.now()}));
-        }catch{}
-      }
-      delete _dkQ[key];
+function dkWrite(k, data){
+  // Write immediately — don't defer, user may refresh before idle
+  try{
+    const save = {
+      netAdm:    data.netAdm,
+      totalAdm:  data.totalAdm,
+      cancelAdm: data.cancelAdm,
+      mgrTargets:    data.mgrTargets    || {},
+      mgrTargetsAll: data.mgrTargetsAll || {},
+      // Keep last 300 trendRows only (enough for all charts)
+      trendRows: (data.trendRows||[]).slice(-300),
+    };
+    // Copy all manager/TL/univ count keys
+    for(const key of Object.keys(data)){
+      if(!(key in save)) save[key] = data[key];
     }
-  };
-  _dkTimer = typeof requestIdleCallback!=='undefined'
-    ? requestIdleCallback(flush,{timeout:2000})
-    : setTimeout(flush,100);
+    localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:save, ts:Date.now()}));
+  } catch(e){
+    // Storage full — clear all our keys and retry
+    try{
+      Object.keys(localStorage)
+        .filter(x=>x.startsWith(CACHE_KEY))
+        .forEach(x=>localStorage.removeItem(x));
+      localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:{
+        netAdm:data.netAdm||0, totalAdm:data.totalAdm||0, cancelAdm:data.cancelAdm||0,
+        trendRows:(data.trendRows||[]).slice(-100),
+        mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{}
+      }, ts:Date.now()}));
+    } catch{}
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1076,8 +1221,20 @@ function norm(raw, p){
   if(!Array.isArray(raw.trendRows)) raw.trendRows = [];
 
   // Preserve target fields
-  const mgrTargets    = raw.mgrTargets    || {};
-  const mgrTargetsAll = raw.mgrTargetsAll || {};
+  let mgrTargets    = raw.mgrTargets    || {};
+  let mgrTargetsAll = raw.mgrTargetsAll || {};
+  // Fallback: try other cached periods if targets missing
+  if(!Object.keys(mgrTargets).length && !Object.keys(mgrTargetsAll).length){
+    // Check all cached periods for targets
+    for(const ck of ['all','monthly','weekly','today']){
+      const ac=mem[ck];
+      if(ac&&ac.data&&Object.keys(ac.data.mgrTargetsAll||{}).length){
+        mgrTargets=ac.data.mgrTargets||{};
+        mgrTargetsAll=ac.data.mgrTargetsAll||{};
+        break;
+      }
+    }
+  }
 
   // ── Always keep the FULL unfiltered trendRows for counsellor/incentive ──
   // counsellors show for the FULL period (all, month, week - whatever server sent)
@@ -1099,41 +1256,76 @@ function norm(raw, p){
   // ── Replace trendRows with filtered set (used by trend chart + bar counts) ──
   raw.trendRows = filteredRows;
 
-  // ── Recount from filtered rows ──
-  const mgr  = {deepesh:0, aslam:0, aasif:0, manas:0};
-  const tl   = {tlAkshay:0, tlKajal:0, tlDevashis:0, tlAntaryami:0, tlManas:0, tlPriyanka:0, tlRuthvik:0, tlBhakti:0};
-  const univ = {alliance:0, amity:0, chandigarh:0, presidency:0, cvRaman:0, gift:0, centurion:0, driems:0};
+  // ── Recount from filtered rows — fully dynamic ──
+  const mgr  = {};
+  const tl   = {};
+  const univ = {};
+  // Reset all dynamic arrays for fresh build
+  MGRS.length = 0; TLS.length = 0; UNIVS.length = 0;
+  const _mgrKeySet = new Set();
+  const _tlKeySet  = new Set();
+  const _univKeySet = new Set();
   let count = 0;
 
   for(let i=0, L=filteredRows.length; i<L; i++){
     const r = filteredRows[i];
-    switch((r.mgr||'').trim().toLowerCase()){
-      case 'deepesh': mgr.deepesh++; break;
-      case 'aslam':   mgr.aslam++;   break;
-      case 'aasif':   mgr.aasif++;   break;
-      case 'manas':   mgr.manas++;   break;
+
+    // ── Manager — dynamic ──
+    const mRaw = (r.mgr||'').toString().trim();
+    if(mRaw){
+      const mk = mRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
+      if(mk){
+        if(!_mgrKeySet.has(mk)){
+          MGRS.push({n:mRaw, k:mk, c:_MGR_COLORS[MGRS.length % _MGR_COLORS.length]});
+          _mgrKeySet.add(mk);
+          mgr[mk] = 0;
+        }
+        mgr[mk] = (mgr[mk]||0)+1;
+      }
     }
-    const tR = (r.tl||'').trim().toLowerCase();
-    const tlKey=resolveTL(tR); if(tlKey) tl[tlKey]=(tl[tlKey]||0)+1;
-    const uR = (r.univ||'').trim().toLowerCase();
-    if     (uR.includes('alliance'))               univ.alliance++;
-    else if(uR.includes('amity'))                  univ.amity++;
-    else if(uR.includes('chandigarh'))             univ.chandigarh++;
-    else if(uR.includes('presidency'))             univ.presidency++;
-    else if(uR.includes('raman'))                  univ.cvRaman++;
-    else if(uR.includes('gift'))                   univ.gift++;
-    else if(uR.includes('centurion'))              univ.centurion++;
-    else if(uR.includes('driems'))                 univ.driems++;
+
+    // ── Team Leader — dynamic ──
+    const tRaw = (r.tl||'').toString().trim();
+    if(tRaw){
+      const tk = 'tl'+tRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
+      if(tk !== 'tl'){
+        if(!_tlKeySet.has(tk)){
+          TLS.push({n:tRaw, k:tk, c:_TL_COLORS[TLS.length % _TL_COLORS.length]});
+          _tlKeySet.add(tk);
+          tl[tk] = 0;
+        }
+        tl[tk] = (tl[tk]||0)+1;
+      }
+    }
+    // Dynamic process/university — auto-build UNIVS from data
+    const uRaw = (r.univ||'').toString().trim();
+    if(uRaw){
+      const nk = uRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
+      if(nk){
+        if(!_univKeySet.has(nk)){
+          const cl=_UCLR[UNIVS.length%_UCLR.length];
+          UNIVS.push({n:uRaw,k:nk,cl});
+          _univKeySet.add(nk);
+          univ[nk]=0;
+        }
+        univ[nk]=(univ[nk]||0)+1;
+      } else {
+        if(!_univKeySet.has('others')){UNIVS.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
+        univ['others']=(univ['others']||0)+1;
+      }
+    } else {
+      if(!_univKeySet.has('others')){UNIVS.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
+      univ['others']=(univ['others']||0)+1;
+    }
     count++;
   }
 
   Object.assign(raw, mgr, tl, univ);
   if(count > 0) raw.netAdm = count;
-  const kn = (raw.alliance||0)+(raw.amity||0)+(raw.chandigarh||0)+(raw.presidency||0)
-           + (raw.cvRaman||0)+(raw.gift||0)+(raw.centurion||0)+(raw.driems||0);
-  raw.others        = Math.max(0, (raw.netAdm||0) - kn);
   raw.mgrTargets    = mgrTargets;
   raw.mgrTargetsAll = mgrTargetsAll;
+  // Rebuild O(1) lookups after dynamic discovery
+  _rebuildLookups();
   return raw;
 }
 
@@ -1143,7 +1335,10 @@ function norm(raw, p){
 async function fetchOne(p, from, to){
   let url=API+'?sheet='+encodeURIComponent(p);
   if(from&&to) url+=`&from=${from}&to=${to}`;
-  const r=await fetch(url,{cache:'no-store'});
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),12000); // 12s timeout
+  const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});
+  clearTimeout(tid);
   if(!r.ok) throw new Error('HTTP '+r.status);
   const raw=await r.json();
   return norm(raw,p);
@@ -1167,7 +1362,9 @@ async function load(p, from=null, to=null, force=false){
 
   // 1. Memory hit — instant
   if(!force && mem[ck] && (Date.now()-mem[ck].ts)<MEM_TTL){
-    safeRender(mem[ck].data, true);
+    // Re-run norm() on cached data so UNIVS gets rebuilt correctly
+    const normed = norm(JSON.parse(JSON.stringify(mem[ck].data)), p);
+    safeRender(normed, true);
     if(!isCustom) schedRefresh(ck,p,from,to,token);
     return;
   }
@@ -1176,7 +1373,7 @@ async function load(p, from=null, to=null, force=false){
   const dk=dkRead(ck);
   if(dk){
     mem[ck]={data:dk.data,ts:dk.ts};
-    safeRender(dk.data, true);
+    safeRender(norm(JSON.parse(JSON.stringify(dk.data)), p), true);
     showDash();
     fetchOne(p,from,to).then(d=>{
       if(!d||token!==renderToken) return;
@@ -1268,39 +1465,70 @@ function prefetchAll(){
 // ═══════════════════════════════════════════════════════
 function resolveTargets(d, p){
   const all = d.mgrTargetsAll || {};
-  const curMo = MO_ABBR[new Date().getMonth()];
 
-  // Find best available monthly targets
+  // ── Determine which month's target to show ──────────────────────────────
+  // Based on the active period/date range — not always "current month"
+  const isMonthTab = p==='monthly';
+  const isWeekTab  = p==='weekly'||p==='thisweek'||p==='lastweek';
+  const isCustom   = p==='custom' || (customFrom && customTo);
+
+  // Derive the relevant month abbreviation
+  let targetMo = MO_ABBR[new Date().getMonth()]; // default = current month
+
+  if(isCustom && customFrom){
+    // Custom range — use the month of the start date
+    const fromDt = new Date(customFrom);
+    if(!isNaN(fromDt)) targetMo = MO_ABBR[fromDt.getMonth()];
+  } else if(isWeekTab && (p==='lastweek')){
+    // Last week — use that week's month
+    const now = new Date();
+    const thisMon = monWeekStart(now);
+    const lMon = new Date(thisMon); lMon.setDate(lMon.getDate()-7);
+    targetMo = MO_ABBR[lMon.getMonth()];
+  }
+  // Month tab and This Week always use current month
+
+  // ── Find targets for the target month ──────────────────────────────────
   let monthly = {};
-  // Priority: current month → flat mgrTargets → any available month
-  if(all[curMo] && Object.keys(all[curMo]).length){
-    monthly = all[curMo];
+
+  if(all[targetMo] && Object.keys(all[targetMo]).length){
+    monthly = all[targetMo];
   } else if(d.mgrTargets && Object.keys(d.mgrTargets).length){
     monthly = d.mgrTargets;
   } else {
-    const found = Object.values(all).find(m=>Object.keys(m).length>0);
-    if(found) monthly = found;
+    // Last resort: use any month available
+    const anyMonth = Object.values(all).find(m=>m&&Object.keys(m).length>0);
+    if(anyMonth) monthly = anyMonth;
   }
 
-  const isMonthTab  = p==='monthly';
-  const isWeekTab   = p==='weekly'||p==='thisweek'||p==='lastweek';
-  const hasTargets  = Object.keys(monthly).length>0;
-  const showTargets = (isMonthTab||isWeekTab) && hasTargets;
+  const hasTargets = Object.keys(monthly).length > 0;
+  // Show targets on Month and Week tabs only
+  const showTargets = hasTargets && (isMonthTab || isWeekTab);
 
-  // Build resolved targets (weekly = monthly/4)
+  // ── Build resolved targets ─────────────────────────────────────────────
+  // Month tab = full monthly target
+  // Week tab  = monthly target ÷ 4
   const targets = Object.create(null);
   if(showTargets){
     Object.entries(monthly).forEach(([k,v])=>{
-      targets[k.toLowerCase()] = isWeekTab ? Math.round(v/4) : v;
+      const norm = k.toLowerCase().trim();
+      targets[norm] = isWeekTab ? Math.round(Number(v)/4) : Number(v);
     });
   }
 
-  // Lookup helper — case insensitive
+  // Available months list (for UI hint)
+  const availableMonths = Object.keys(all).filter(m => Object.keys(all[m]||{}).length > 0);
+
   function get(mgr){
-    return targets[mgr.k]||targets[mgr.k.toLowerCase()]||targets[mgr.n.toLowerCase()]||0;
+    // mgr.k is already lowercase-no-spaces (dynamic key)
+    // targets keys are also lowercase-no-spaces from getTargets fix
+    return targets[mgr.k]
+        || targets[mgr.n.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'')]
+        || targets[mgr.n.toLowerCase()]
+        || 0;
   }
 
-  return {showTargets, targets, get, isWeekTab};
+  return {showTargets, targets, get, isWeekTab, targetMo, availableMonths};
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1319,7 +1547,7 @@ function render(d, stale, p){
   lastTrendRows = d.trendRows||[];
 
   // ── Target resolution ──────────────────────────────
-  const {showTargets, get: tgtGet, isWeekTab} = resolveTargets(d, p);
+  const {showTargets, get: tgtGet, isWeekTab, targetMo: _curTargetMo} = resolveTargets(d, p);
 
   // ── Manager bars ───────────────────────────────────
   const sortedMgrs = [...MGRS].sort((a,b)=>(d[b.k]||0)-(d[a.k]||0));
@@ -1327,7 +1555,12 @@ function render(d, stale, p){
   // Clear dynamic el cache
   MGRS.forEach((_,i)=>{ delete _elCache['mb'+i]; delete _elCache['mbt'+i]; });
 
-  if(net===0){
+  // Show loading skeleton if no data yet (first load)
+  if(net===0 && !d.trendRows){
+    $('mb').innerHTML = `
+      <div class="skel-bar"></div><div class="skel-bar" style="width:70%"></div>
+      <div class="skel-bar" style="width:50%"></div><div class="skel-bar" style="width:30%"></div>`;
+  } else if(net===0){
     $('mb').innerHTML = nd('No admissions for this period');
   } else {
     const frag = document.createDocumentFragment();
@@ -1349,8 +1582,12 @@ function render(d, stale, p){
       if(showTargets && tgt>0){
         const tgtRow=document.createElement('div');
         tgtRow.className='br-target show';
-        const lbl=isWeekTab?'WK TARGET':'TARGET';
-        tgtRow.innerHTML=`<div class="bn-tgt">${lbl}</div><div class="bt-tgt"><div class="bf-tgt" id="mbt${i}"></div><span class="bt-tgt-lbl">${v}/${tgt}${pct!==null?' · '+pct+'%':''}</span></div><div class="bv-tgt">${tgt}</div>`;
+        const moName = _curTargetMo ? MO_SHORT[MO_ABBR.indexOf(_curTargetMo)] : '';
+        const lbl = isWeekTab
+          ? (moName ? moName+' WK TGT' : 'WK TARGET')
+          : (moName ? moName+' TARGET'  : 'TARGET');
+        const pctCls=pct===null?'':pct>=100?'over':pct>=50?'near':'low';
+        tgtRow.innerHTML=`<div class="bn-tgt">${lbl}</div><div class="bt-tgt"><div class="bf-tgt"></div><div class="bf-tgt-ach ${pctCls}" id="mbt${i}"></div><span class="bt-tgt-lbl">${v}/${tgt}${pct!==null?' · '+pct+'%':''}</span></div><div class="bv-tgt">${tgt}</div>`;
         wrap.appendChild(tgtRow);
       }
       frag.appendChild(wrap);
@@ -1405,7 +1642,7 @@ function render(d, stale, p){
   ['t1','t2','t3'].forEach(id=>{ const e=$(id); if(e) e.textContent=staleTxt+ts; });
   setSt(stale ? '⚡ Instant · refreshing in background' : '✅ Live data · refreshes in 5 min');
 
-  // ── Bar animations — batch READ then WRITE to avoid layout thrash ──
+  // ── Bar animations — deferred ──
   requestAnimationFrame(()=>{
     // READ: collect all els in one pass (no style reads = no forced layout)
     const mEls=sortedMgrs.map((_,i)=>$f('mb'+i));
@@ -1423,27 +1660,41 @@ function render(d, stale, p){
         for(let i=0;i<mtEls.length;i++){
           const e=mtEls[i]; if(!e) continue;
           const tgt=tgtGet(sortedMgrs[i]);
-          if(tgt>0){e.style.transition='';e.style.transform=`scaleX(${tgt/maxMgr})`;}
+          if(tgt>0){
+            const v=d[sortedMgrs[i].k]||0;
+            e.style.transition='';
+            e.style.transform=`scaleX(${Math.min(1,v/tgt)})`;
+          }
         }
       }
     });
   });
 
-  // ── Trend + Counsellor ──────────────────────────────
-  // Trend uses allTrendRows (full period) — groups by Daily/Weekly/Monthly
-  // Donut uses lastTrendRows (week-filtered when on week tabs)
-  // Counsellor uses allTrendRows (full period)
-  drawTrend(d.allTrendRows || d.trendRows || []);
-  drawCounsel(d.allTrendRows || d.trendRows || []);
+  // ── Trend + Counsellor — deferred to after paint ───
   showDash();
+  // Defer heavy chart renders until after browser paints manager bars
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      drawTrend(d.allTrendRows || d.trendRows || []);
+      drawCounsel(d.allTrendRows || d.trendRows || []);
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════════════
 // DONUT
 // ═══════════════════════════════════════════════════════
 // O(1) lookups pre-built at module load
-const _mgrByKey=Object.create(null); MGRS.forEach(m=>_mgrByKey[m.k]=m);
-const _tlByKey =Object.create(null); TLS.forEach(t=>_tlByKey[t.k]=t);
+// _mgrByKey and _tlByKey are rebuilt dynamically after each norm() call
+const _mgrByKey = Object.create(null);
+const _tlByKey  = Object.create(null);
+function _rebuildLookups(){
+  // Clear and rebuild
+  for(const k in _mgrByKey) delete _mgrByKey[k];
+  for(const k in _tlByKey)  delete _tlByKey[k];
+  MGRS.forEach(m=>_mgrByKey[m.k]=m);
+  TLS.forEach(t=>_tlByKey[t.k]=t);
+}
 const _univLC  =UNIVS.map(u=>u.n.toLowerCase()); // pre-lowercased
 
 // TL name alias map — handles spelling variations from the sheet
@@ -1460,13 +1711,36 @@ const _tlAlias = {
   'rithvik':'tlRuthvik','hrithvik':'tlRuthvik',
   'bhakti':'tlBhakti',
 };
-function resolveTL(raw){ return _tlAlias[raw]||null; }
+function resolveTL(raw){
+  if(!raw) return null;
+  const r = raw.toLowerCase().trim();
+  // Check direct key match
+  for(const k in _tlByKey){ if(k === 'tl'+r.replace(/\s+/g,'').replace(/[^a-z0-9]/g,'')) return k; }
+  // Fallback alias
+  return _tlAlias[r]||null;
+}
 
 // Also build reverse map: tlKey → canonical lowercase name for filter matching
 const _tlKeyToLC = Object.create(null);
 TLS.forEach(t=>_tlKeyToLC[t.k]=t.n.toLowerCase());
 
+function ensureDonutSegments(){
+  const svg=document.querySelector('svg.udonut')||($('u1')&&$('u1').closest('svg'));
+  if(!svg) return;
+  const have=svg.querySelectorAll('circle[id^="u"]').length;
+  for(let i=have+1;i<=UNIVS.length;i++){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.id='u'+i;c.setAttribute('cx','50');c.setAttribute('cy','50');
+    c.setAttribute('r','38');c.setAttribute('fill','none');
+    c.setAttribute('stroke-width','12');
+    c.setAttribute('stroke-dasharray','0 238.8');
+    c.setAttribute('transform','rotate(-90 50 50)');
+    svg.appendChild(c);
+  }
+}
+
 function updateDonut(d,rows){
+  ensureDonutSegments();
   const UL=UNIVS.length;
   const uvArr=new Int32Array(UL); // typed — fastest accumulator
   const fk=activeMgr||activeTL;
@@ -1485,10 +1759,10 @@ function updateDonut(d,rows){
       } else {
         if((r[ft]||'').trim().toLowerCase()!==fname) continue;
       }
-      const u=(r.univ||'').trim().toLowerCase(); if(!u) continue;
+      const uRaw2=(r.univ||'').toString().trim(); if(!uRaw2) continue;
+      const nk2=uRaw2.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
       let hit=false;
-      for(let j=0;j<UL-1;j++){if(u.includes(_univLC[j])){uvArr[j]++;hit=true;break;}}
-      if(!hit) uvArr[UL-1]++;
+      for(let j=0;j<UL;j++){if(UNIVS[j].k===nk2){uvArr[j]++;hit=true;break;}}
     }
     let sum=0; for(let j=0;j<UL;j++) sum+=uvArr[j];
     if(sum===0){
@@ -1516,9 +1790,10 @@ function updateDonut(d,rows){
     const s=$('u'+(j+1));
     if(s){s.setAttribute('stroke',u.cl);s.setAttribute('stroke-dasharray',arc+' '+DONUT_C);s.setAttribute('stroke-dashoffset',-off);}
     off+=arc;
-    legParts.push(`<div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:${u.cl}"></div><span class="leg-name">${u.n}</span></div><span class="leg-pct">${total>0?Math.round(v/total*100):0}%</span><span class="leg-val">${v}</span></div>`);
+    // Only show in legend if count > 0
+    if(v>0) legParts.push(`<div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:${u.cl}"></div><span class="leg-name">${u.n}</span></div><span class="leg-pct">${total>0?Math.round(v/total*100):0}%</span><span class="leg-val">${v}</span></div>`);
   }
-  $('uleg').innerHTML=legParts.join('');
+  $('uleg').innerHTML=legParts.length?legParts.join(''):'<div style="color:rgba(255,255,255,.3);font-size:12px;padding:8px">No data</div>';
 }
 
 function toggleMgrFilter(key,name){
@@ -1932,14 +2207,20 @@ $q('.tabs').addEventListener('click',e=>{
     const thisMon=monWeekStart(n);
     const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
     const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
+    delete mem['lastweek']; try{localStorage.removeItem(CACHE_KEY+'lastweek');}catch(e){}
     load('lastweek', iso(lMon), iso(lSun));
   } else if(p==='thisweek'){
-    // Pass today's Mon–Sun explicitly so Apps Script also filters correctly
     const n=new Date(); n.setHours(0,0,0,0);
     const wMon=monWeekStart(n);
     const wSun=sunWeekEnd(n);
+    // Clear cache so targets always refresh
+    delete mem['weekly']; try{localStorage.removeItem(CACHE_KEY+'weekly');}catch(e){}
     load('weekly', iso(wMon), iso(wSun));
   } else {
+    // Clear cache for Month tab so targets always refresh
+    if(p==='monthly'){
+      delete mem['monthly']; try{localStorage.removeItem(CACHE_KEY+'monthly');}catch(e){}
+    }
     load(p);
   }
 },{passive:true});
@@ -2116,18 +2397,31 @@ $('counselFilterX').addEventListener('click',()=>{
 // BOOT
 // ═══════════════════════════════════════════════════════
 (function boot(){
-  // Instant render from disk if available
+  // Always show dashboard shell immediately
+  const ldr=$('ldr');
+  if(ldr){ ldr.classList.add('out'); setTimeout(()=>{ ldr.style.display='none'; },150); }
+  $('dash').style.display='block';
+  shown=true;
+
+  // Try localStorage cache first — instant render
   const dk=dkRead('all');
-  if(dk){
-    mem['all']={data:dk.data,ts:dk.ts};
-    activeCk='all'; activePeriod='all';
-    render(dk.data,true,'all');
-    showDash();
+  if(dk && dk.data){
+    try{
+      const nd=JSON.parse(JSON.stringify(dk.data));
+      mem['all']={data:nd,ts:dk.ts};
+      activeCk='all'; activePeriod='all';
+      render(nd, true, 'all');
+      setSt('⚡ Cached · refreshing…');
+      // Fresh cache (<10min): background refresh after 3s
+      const age=Date.now()-dk.ts;
+      setTimeout(()=>load('all'), age < 3*60000 ? 5000 : 1000);
+      return;
+    } catch(e){ /* cache corrupt — fall through to fetch */ }
   }
-  // Fresh fetch
+
+  // No cache — fetch live data (skeletons visible while waiting)
+  setSt('⏳ Loading…');
   load('all');
-  // Prefetch all other tabs in parallel
-  setTimeout(prefetchAll, dk?800:200);
 })();
 </script>
 </body>
