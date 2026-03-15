@@ -95,17 +95,17 @@ header{
   display:flex;align-items:center;justify-content:space-between;
   box-shadow:0 1px 0 rgba(255,255,255,0.04), 0 6px 30px rgba(0,0,0,0.55);
 }
-.brand{display:flex;align-items:center;gap:10px;}
+.brand{display:flex;align-items:center;gap:12px;}
 .brand-icon{
-  width:31px;height:31px;border-radius:9px;
+  width:36px;height:36px;border-radius:10px;
   background:linear-gradient(135deg,#ff6a1a,#ff9a5c);
-  display:flex;align-items:center;justify-content:center;font-size:15px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
   box-shadow:0 0 0 1px rgba(255,106,26,0.4), 0 0 18px rgba(255,106,26,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
 }
-.brand-name{font-weight:900;font-size:0.93rem;letter-spacing:-0.025em;}
+.brand-name{font-weight:900;font-size:1.22rem;letter-spacing:-0.03em;color:var(--text);}
 .brand-name em{
   color:var(--amity);font-style:normal;
-  text-shadow:0 0 20px rgba(255,106,26,0.6);
+  text-shadow:0 0 24px rgba(255,106,26,0.7);
 }
 
 .hdr-r{display:flex;align-items:center;gap:10px;}
@@ -113,8 +113,8 @@ header{
 /* ── DATE PILLS ── */
 .date-pills{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
 .dpill{
-  padding:0.23rem 0.78rem;border-radius:50px;cursor:pointer;
-  font-size:0.68rem;font-weight:700;color:var(--sub);
+  padding:0.26rem 0.88rem;border-radius:50px;cursor:pointer;
+  font-size:0.78rem;font-weight:800;color:var(--sub);
   border:1px solid var(--border2);
   background:rgba(255,255,255,0.03);
   transition:all 0.18s;white-space:nowrap;
@@ -316,8 +316,8 @@ main{
 /* ── SECTION HEADER ── */
 .sec-hdr{
   display:flex;align-items:center;gap:10px;
-  font-size:0.58rem;font-weight:800;letter-spacing:0.2em;
-  text-transform:uppercase;color:var(--dim);
+  font-size:0.82rem;font-weight:900;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--text);
   margin-bottom:0.55rem;margin-top:0.1rem;
   font-family:'JetBrains Mono',monospace;
 }
@@ -456,13 +456,13 @@ main{
 }
 
 .card-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.7rem;flex-wrap:wrap;gap:6px;}
-.card-title{font-weight:900;font-size:0.88rem;color:var(--text);letter-spacing:-0.015em;}
-.card-sub{font-size:0.62rem;color:var(--sub);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+.card-title{font-weight:900;font-size:1.08rem;color:var(--text);letter-spacing:-0.025em;}
+.card-sub{font-size:0.72rem;color:var(--sub);margin-top:5px;font-family:'JetBrains Mono',monospace;font-weight:700;}
 
 .legend-row{display:flex;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap;}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--sub);font-weight:700;}
-.leg-swatch{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.leg-sorted{font-size:0.64rem;color:var(--ally);font-weight:700;font-family:'JetBrains Mono',monospace;text-shadow:0 0 10px rgba(0,212,245,0.4);}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--text);font-weight:900;letter-spacing:0.01em;}
+.leg-swatch{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+.leg-sorted{font-size:0.78rem;color:var(--ally);font-weight:900;font-family:'JetBrains Mono',monospace;text-shadow:0 0 10px rgba(0,212,245,0.4);}
 
 .chip{
   font-size:0.57rem;font-weight:800;letter-spacing:0.06em;
@@ -539,10 +539,10 @@ main{
   white-space:nowrap;z-index:10;pointer-events:none;
 }
 .cbar-av{
-  flex-shrink:0;font-size:0.82rem;font-weight:900;color:var(--amity);
-  white-space:nowrap;min-width:32px;text-align:left;
+  flex-shrink:0;font-size:0.96rem;font-weight:900;color:var(--amity);
+  white-space:nowrap;min-width:36px;text-align:left;
   font-family:'JetBrains Mono',monospace;
-  text-shadow:0 0 12px rgba(255,106,26,0.6);
+  text-shadow:0 0 14px rgba(255,106,26,0.7);
 }
 
 /* Admit bar */
@@ -558,16 +558,16 @@ main{
   will-change:width;
 }
 .cbar-dv{
-  flex-shrink:0;font-size:0.78rem;font-weight:900;color:var(--green2);
-  white-space:nowrap;min-width:32px;font-family:'JetBrains Mono',monospace;
-  text-shadow:0 0 12px rgba(24,233,110,0.6);
+  flex-shrink:0;font-size:0.92rem;font-weight:900;color:var(--green2);
+  white-space:nowrap;min-width:36px;font-family:'JetBrains Mono',monospace;
+  text-shadow:0 0 14px rgba(24,233,110,0.7);
 }
 
 /* PCT badge */
-.cbar-pct-col{flex-shrink:0;width:46px;text-align:center;}
+.cbar-pct-col{flex-shrink:0;width:54px;text-align:center;}
 .cbar-pct{
-  display:inline-block;font-size:0.58rem;font-weight:800;
-  padding:2px 6px;border-radius:20px;white-space:nowrap;
+  display:inline-block;font-size:0.72rem;font-weight:900;
+  padding:3px 7px;border-radius:20px;white-space:nowrap;
   font-family:'JetBrains Mono',monospace;
 }
 .pct-good{
@@ -702,7 +702,12 @@ main{
         </div>
         <span class="chip c" id="mgrChip">—</span>
       </div>
-      <div class="chart-box" style="height:300px"><canvas id="mgrChart"></canvas></div>
+      <div class="chart-box" style="height:280px"><canvas id="mgrChart"></canvas></div>
+      <div class="legend-row" style="margin-top:10px;padding:0 4px;">
+        <span class="leg-item"><span class="leg-swatch" style="background:var(--gold);border-radius:50%;box-shadow:0 0 6px rgba(255,204,0,0.5)"></span>Conv %</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:rgba(6,182,212,0.85);box-shadow:0 0 6px rgba(6,182,212,0.4)"></span>Applications</span>
+        <span class="leg-item"><span class="leg-swatch" style="background:var(--green);box-shadow:0 0 6px rgba(24,233,110,0.4)"></span>Admissions</span>
+      </div>
     </div>
   </div>
 
@@ -937,16 +942,19 @@ function buildAdmitSet(rows){
 const isAdmit = r => ADMIT_SET.has(r);
 
 // Aggregation with correct stable cache key
+// apps = non-admitted only; admits = admitted only
 const _AGG_CACHE = new Map();
 function agg(data, col){
-  // Use array reference + col as key — reliable per render cycle
   const key = col + '|' + (data._id||0);
   if(_AGG_CACHE.has(key)) return _AGG_CACHE.get(key);
   const apps={}, admits={};
   for(let i=0;i<data.length;i++){
     const r=data[i], k=String(r[col]||'Unknown').trim();
-    apps[k]=(apps[k]||0)+1;
-    if(ADMIT_SET.has(r)) admits[k]=(admits[k]||0)+1;
+    if(ADMIT_SET.has(r)){
+      admits[k]=(admits[k]||0)+1;
+    } else {
+      apps[k]=(apps[k]||0)+1;
+    }
   }
   const res={apps,admits};
   _AGG_CACHE.set(key,res);
@@ -1389,10 +1397,11 @@ function _doRender(){
 function buildProcBar(dateFiltered){
   const pool  = dateFiltered || RAW;
   const procs = uniq(pool, C.process);
+  const poolApps = pool.filter(r => !ADMIT_SET.has(r)).length;
   let h = `<span class="flbl">Filter :</span>
-    <div class="proc-pill ${ACTIVE==='All'?'aa':''}" onclick="setP('All')">All <span class="pcnt">${fmt(pool.length)}</span></div>`;
+    <div class="proc-pill ${ACTIVE==='All'?'aa':''}" onclick="setP('All')">All <span class="pcnt">${fmt(poolApps)}</span></div>`;
   procs.forEach(p=>{
-    const cnt   = pool.filter(r=>String(r[C.process]||'').trim()===p).length;
+    const cnt   = pool.filter(r=>String(r[C.process]||'').trim()===p && !ADMIT_SET.has(r)).length;
     const color = pc(p);
     const isAct = ACTIVE === p;
     h += `<div class="proc-pill${isAct?' proc-pill-active':''}" 
@@ -1412,8 +1421,10 @@ function setP(p){
 /* ── KPIs ── */
 let _kpiHash = '';
 function buildKPIs(){
-  const d=FILTERED,total=d.length;
-  let admits=0;for(let i=0;i<d.length;i++)if(ADMIT_SET.has(d[i]))admits++;
+  const d=FILTERED;
+  let admits=0;
+  for(let i=0;i<d.length;i++) if(ADMIT_SET.has(d[i])) admits++;
+  const total = d.length - admits; // applications = non-admitted rows only
   const rate=total?(admits/total*100).toFixed(1):0;
   const hash=`${total}|${admits}|${rate}`;
   if(hash===_kpiHash) return;
@@ -1421,7 +1432,7 @@ function buildKPIs(){
   const rCls=+rate>=30?'ok':+rate>=15?'warn':'low';
   const procs=uniq(d,C.process).length,cnsl=uniq(d,C.counsellor).length,mgr=uniq(d,C.manager).length;
   document.getElementById('kpis').innerHTML=
-    kpiH('Total Applications',fmt(total),'var(--blue)','📋','All processes','info')
+    kpiH('Total Applications',fmt(total),'var(--blue)','📋','Excl. admitted','info')
    +kpiH('Total Admissions',fmt(admits),'var(--green)','🎓','Admission Done','ok')
    +kpiH('Conversion Rate',rate+'%','var(--gold)','📈','Admit / Applied',rCls)
    +kpiH('Processes Active',procs,'var(--ally)','⚙️','Amity + Alliance +','info')
@@ -1546,13 +1557,9 @@ function buildMgrChart(){
     ]},
     options:{
       responsive:true,maintainAspectRatio:false,
-      layout:{padding:{top:64,bottom:8,left:4,right:4}},
+      layout:{padding:{top:64,bottom:0,left:4,right:4}},
       plugins:{
-        legend:{
-          display:true,position:'bottom',align:'center',
-          labels:{color:'#7a8599',font:{family:'JetBrains Mono',size:10,weight:'600'},
-            usePointStyle:true,pointStyleWidth:8,padding:18,boxHeight:6}
-        },
+        legend:{display:false},
         tooltip:{
           ...TIP,
           callbacks:{
@@ -1673,11 +1680,12 @@ function openMgrModal(mgrName, mode){
   const rows = FILTERED.filter(r => String(r[C.manager]||'').trim() === mgrName);
   const subset = mode === 'Admissions' ? rows.filter(r => isAdmit(r)) : rows;
 
+  const mgrApps   = rows.filter(r=>!isAdmit(r)).length;
   document.getElementById('mdrName').textContent = mgrName;
-  document.getElementById('mdrMode').textContent = mode.toUpperCase() + ' · ' + rows.length + ' RECORDS';
+  document.getElementById('mdrMode').textContent = mode.toUpperCase() + ' · ' + mgrApps + ' RECORDS';
   document.getElementById('mdrModeIcon').textContent = mode === 'Admissions' ? '🎓' : '📋';
 
-  const totalApps = rows.length;
+  const totalApps = rows.filter(r=>!isAdmit(r)).length;
   const totalAdmits = rows.filter(r=>isAdmit(r)).length;
   const rate = totalApps ? (totalAdmits/totalApps*100).toFixed(1) : 0;
   const rateColor = +rate>=30?'var(--green)':+rate>=15?'var(--gold)':'var(--rose)';
@@ -1737,24 +1745,24 @@ function openMgrModal(mgrName, mode){
     tlMap[tl].apps++;
     if(isAdmit(r)) tlMap[tl].admits++;
   });
-  // For TL cards always show full apps/admits from all rows, not just subset
+  // TL map — apps = non-admitted, admits = admitted
   const tlFull = {};
   rows.forEach(r=>{
     const tl = String(r[C.tl]||'').trim()||'—';
     if(!tlFull[tl]) tlFull[tl]={apps:0,admits:0};
-    tlFull[tl].apps++;
     if(isAdmit(r)) tlFull[tl].admits++;
+    else tlFull[tl].apps++;
   });
   document.getElementById('mdrTLCount').textContent = Object.keys(tlFull).length + ' TLs';
   document.getElementById('mdrTLs').innerHTML = buildCards(tlFull, 'var(--purple)', 'linear-gradient(90deg,#b57bff,#d8b4fe)');
 
-  // Counsellor map
+  // Counsellor map — apps = non-admitted, admits = admitted
   const cnFull = {};
   rows.forEach(r=>{
     const cn = String(r[C.counsellor]||'').trim()||'—';
     if(!cnFull[cn]) cnFull[cn]={apps:0,admits:0};
-    cnFull[cn].apps++;
     if(isAdmit(r)) cnFull[cn].admits++;
+    else cnFull[cn].apps++;
   });
   document.getElementById('mdrCnCount').textContent = Object.keys(cnFull).length + ' counsellors';
   document.getElementById('mdrCnsls').innerHTML = buildCards(cnFull, 'var(--ally)', 'linear-gradient(90deg,#06b6d4,#a5f3fc)');
@@ -1783,8 +1791,8 @@ function closeMgrModal(){
 /* ── TL DRILL-DOWN ── */
 function openTLModal(tlName, mode){
   const rows   = FILTERED.filter(r => String(r[C.tl]||'').trim() === tlName);
-  const totalApps   = rows.length;
   const totalAdmits = rows.filter(r => isAdmit(r)).length;
+  const totalApps   = rows.length - totalAdmits;
   const rate  = totalApps ? (totalAdmits/totalApps*100).toFixed(1) : 0;
   const rateColor = +rate>=30?'var(--green)':+rate>=15?'var(--gold)':'var(--rose)';
 
@@ -1797,13 +1805,13 @@ function openTLModal(tlName, mode){
      <span style="font-size:0.75rem;font-weight:900;padding:5px 14px;border-radius:20px;background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.28);font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">${totalAdmits} admits</span>
      <span style="font-size:0.75rem;font-weight:900;padding:5px 14px;border-radius:20px;background:rgba(255,204,0,0.1);color:${rateColor};border:1px solid rgba(255,204,0,0.25);font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">${rate}%</span>`;
 
-  // Build counsellor map from all rows under this TL
+  // Build counsellor map — apps = non-admitted, admits = admitted
   const cnMap = {};
   rows.forEach(r => {
     const cn = String(r[C.counsellor]||'').trim() || '—';
     if(!cnMap[cn]) cnMap[cn] = {apps:0, admits:0};
-    cnMap[cn].apps++;
     if(isAdmit(r)) cnMap[cn].admits++;
+    else cnMap[cn].apps++;
   });
   const sorted = Object.entries(cnMap).sort((a,b) => b[1].apps - a[1].apps);
   const maxV   = Math.max(...sorted.map(([,v]) => v.apps), 1);
