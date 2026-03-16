@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>higher.study · Admissions Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="preconnect" href="https://script.google.com">
   <link rel="dns-prefetch" href="https://script.googleusercontent.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +29,7 @@
   --accent3:#ffd166;
   --teal:#06d6a0;
   --indigo:#7c6cfc;
-  --font:'DM Sans',sans-serif;
+  --font:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-display:'Syne',sans-serif;
   --shadow:0 8px 32px rgba(0,0,0,.45);
   --shadow-sm:0 2px 12px rgba(0,0,0,.3);
@@ -39,9 +42,8 @@ body{-webkit-overflow-scrolling:touch;}
 body::before{
   content:'';position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(232,81,42,.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(124,108,252,.07) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(6,214,160,.04) 0%, transparent 70%);
+    radial-gradient(ellipse 70% 40% at 10% 0%, rgba(232,81,42,.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 90% 100%, rgba(124,108,252,.05) 0%, transparent 55%);
   pointer-events:none;
 }
 body{
@@ -119,7 +121,7 @@ body::before{
 .tab{
   padding:6px 13px;border-radius:9px;font-size:12px;font-weight:700;
   cursor:pointer;color:rgba(255,255,255,.32);border:none;background:transparent;
-  font-family:var(--font);transition:all .15s ease;user-select:none;white-space:nowrap;
+  font-family:var(--font);transition:color .12s,background .12s;user-select:none;white-space:nowrap;
 }
 .tab.on{background:rgba(255,255,255,.95);color:#08091a;font-weight:800;}
 .tab:hover:not(.on){color:rgba(255,255,255,.72);background:rgba(255,255,255,.08);}
@@ -131,7 +133,7 @@ body::before{
   padding:7px 13px;border-radius:10px;
   border:1px solid var(--brd);background:rgba(255,255,255,.06);
   cursor:pointer;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);
-  font-family:var(--font);transition:all .15s ease;white-space:nowrap;user-select:none;
+  font-family:var(--font);transition:color .12s,background .12s;white-space:nowrap;user-select:none;
 }
 .cal-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.15);}
 .cal-btn.active{background:rgba(201,78,45,.18);border-color:rgba(201,78,45,.45);color:#f87c5e;}
@@ -233,16 +235,7 @@ body::before{
   will-change:transform;
 }
 /* Shimmer on bar fill */
-.bf::after{
-  content:'';position:absolute;inset:0;border-radius:8px;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.08) 50%,transparent 100%);
-  transform:translateX(-100%);
-  animation:barShimmer 2.5s ease infinite;
-}
-@keyframes barShimmer{
-  0%{transform:translateX(-100%);}
-  60%,100%{transform:translateX(100%);}
-}
+/* shimmer removed for performance */
 .bl{
   position:absolute;top:50%;left:10px;transform:translateY(-50%);
   display:flex;align-items:center;
@@ -413,7 +406,7 @@ body::before{
   padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;
   cursor:pointer;border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,.05);color:rgba(255,255,255,.38);
-  font-family:var(--font);transition:all .15s ease;user-select:none;
+  font-family:var(--font);transition:color .12s,background .12s;user-select:none;
 }
 .tf:hover{color:#fff;}
 .tf.on{background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.5);color:#a5b4fc;}
@@ -629,10 +622,10 @@ body::before{
 .cal-day.range-end{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important;border-radius:2px 7px 7px 2px;}
 .cal-day.range-start.range-end{border-radius:7px!important;}
 .cal-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
-.btn-apply{padding:12px;border-radius:11px;background:var(--accent);border:none;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);transition:all .15s ease;}
-.btn-apply:hover:not(:disabled){background:#b8431f;transform:translateY(-1px);}
+.btn-apply{padding:12px;border-radius:11px;background:var(--accent);border:none;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);transition:color .12s,background .12s;}
+.btn-apply:hover:not(:disabled){background:#b8431f;}
 .btn-apply:disabled{opacity:.35;pointer-events:none;}
-.btn-clear{padding:10px;border-radius:11px;background:transparent;border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.38);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s ease;}
+.btn-clear{padding:10px;border-radius:11px;background:transparent;border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.38);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:color .12s,background .12s;}
 .btn-clear:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);}
 
 /* ═══════════════════════════════════════════════════════
@@ -698,11 +691,7 @@ body::before{
 ::selection{background:rgba(232,81,42,.3);color:#fff;}
 
 /* Card top shimmer line */
-.card::before{
-  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
-  pointer-events:none;z-index:1;
-}
+/* card top line removed for perf */
 
 /* Tab container pill */
 .tabs{
@@ -720,7 +709,7 @@ body::before{
   width:10px;height:10px;border-radius:50%;flex-shrink:0;
   transition:transform .2s,box-shadow .2s;
 }
-.leg-row:hover .leg-dot{transform:scale(1.3);box-shadow:0 0 8px currentColor;}
+.leg-row:hover .leg-dot{transform:scale(1.15);}
 
 /* Bar bg subtle texture */
 .bt-bg{
@@ -748,8 +737,32 @@ body::before{
 /* Stat timestamp */
 .ts{font-size:10px;letter-spacing:.02em;opacity:.55;}
 
-/* Smooth all transitions */
-*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+/* ── Tab-switch smooth transition ──────────────────── */
+#mb, #tb, #tlist, #uleg, #cPodium, #cGrid, #incChart, #trendStats {
+  transition: opacity 0.15s ease;
+}
+#mb.switching, #tb.switching, #tlist.switching,
+#uleg.switching, #cPodium.switching, #cGrid.switching {
+  opacity: 0.55;
+}
+
+/* Fetching status pill — subtle, non-blocking */
+#stxt {
+  transition: color 0.2s ease;
+}
+
+/* Smooth KPI number transitions */
+#pnet, #ptot, #pcan {
+  transition: color 0.3s ease;
+}
+
+/* Tab active state — snappier feel */
+.tab {
+  transition: color .08s, background .08s;
+}
+.tab.on {
+  transition: none;
+}
 
 /* ── Skeleton loader ─────────────────────────────── */
 .skel-bar{
@@ -784,6 +797,14 @@ body::before{
 .skel-bar{
   isolation:isolate;
 }
+
+/* Performance: GPU layers only where needed */
+.bf, .bf-tgt-ach { will-change: transform; }
+.ldr-ring { will-change: transform; }
+/* Reduce paint on static elements */
+.card, .barlist, .leg { will-change: auto; }
+/* Smooth scrolling without jank */
+.dash-wrap { transform: translateZ(0); }
 </style>
 </head>
 <body>
@@ -945,7 +966,7 @@ body::before{
     </div>
   </div>
 
-  <!-- TREND CHART -->
+  <!-- TREND CHART (content-visibility for performance) -->
   <div class="full-card f4">
     <div class="trend-head">
       <div class="card-title">📈 Admission Trend Analysis</div>
@@ -1008,10 +1029,11 @@ body::before{
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbyklSSdFverJ8xb_GQDjcSTpfzjkVxnIpInpXURPjYng_aCwq2EfMCFzyVGZNiWT_6i/exec';
-const CACHE_KEY  = 'hs_v1_';    // stable key — only change on major updates
-const MEM_TTL    = 10 * 60 * 1000; // 10 min memory cache
-const DISK_TTL   = 30 * 60 * 1000; // 30 min disk cache — instant on refresh
+const API = 'https://script.google.com/macros/s/AKfycbwYS_Cbzj3gOjK2_e16qfRRCsIBsd7tcbFTQrBlOVfkXCbUkwJO_6T-Lp79w2QYWVim/exec';
+const CACHE_KEY  = 'hs_v2_';    // bumped to bust old short-TTL cache
+const MEM_TTL    = 30 * 60 * 1000; // 30 min memory cache — was 10
+const DISK_TTL   = 2  * 60 * 60 * 1000; // 2 hr disk cache — was 30 min
+const PREFETCH_TTL = 5 * 60 * 1000;  // re-prefetch after 5 min idle
 const RETRY_MS   = 20 * 1000;
 const DONUT_C    = 238.8;
 
@@ -1065,8 +1087,16 @@ function fmtInc(n){
   return Math.round(n).toLocaleString('en-IN');
 }
 function nd(msg){ return`<div class="nodata"><div class="ico">📭</div><p>${msg}</p></div>`; }
-function setSt(t){ const e=$('stxt'); if(e) e.innerHTML=t; }
+function setSt(t){ const e=$('stxt'); if(e){ if(t.includes('<')) e.innerHTML=t; else e.textContent=t; } }
 function setStLoading(){ setSt('⏳ Fetching data…'); }
+
+// Show a subtle non-blocking "refreshing" badge on status bar
+function setRefreshing(on){
+  const dot = document.querySelector('.live-dot');
+  if(!dot) return;
+  if(on){ dot.style.background='#f59e0b'; dot.style.boxShadow='0 0 6px rgba(245,158,11,.6)'; }
+  else   { dot.style.background=''; dot.style.boxShadow=''; }
+}
 
 const _rgbaCache = Object.create(null);
 function rgba(hex,a){
@@ -1093,8 +1123,7 @@ function showDash(){
 const _animRaf = new WeakMap();
 function animCount(el, target){
   if(!el) return;
-  // Skip animation if value already correct
-  if(el._animTarget===target && parseInt(el.textContent)===target) return;
+  if(el._animTarget===target) return; // already animating to this value
   el._animTarget = target;
   const start = parseInt(el.textContent)||0;
   if(start===target){ el.textContent=target; return; }
@@ -1336,16 +1365,28 @@ async function fetchOne(p, from, to){
   let url=API+'?sheet='+encodeURIComponent(p);
   if(from&&to) url+=`&from=${from}&to=${to}`;
   const ctrl=new AbortController();
-  const tid=setTimeout(()=>ctrl.abort(),12000); // 12s timeout
-  const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});
-  clearTimeout(tid);
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const raw=await r.json();
-  return norm(raw,p);
+  const tid=setTimeout(()=>ctrl.abort(),15000); // 15s timeout
+  setRefreshing(true);
+  try {
+    const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});
+    clearTimeout(tid);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const raw=await r.json();
+    setRefreshing(false);
+    return norm(raw,p);
+  } catch(e) {
+    clearTimeout(tid);
+    setRefreshing(false);
+    throw e;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
 // LOAD — race-safe, instant-from-cache
+// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// LOAD — instant-from-cache + silent background refresh
+// Every tab click shows data immediately if any cache exists
 // ═══════════════════════════════════════════════════════
 async function load(p, from=null, to=null, force=false){
   clearTimeout(refreshTimer);
@@ -1354,44 +1395,59 @@ async function load(p, from=null, to=null, force=false){
   const token    = ++renderToken;
 
   function safeRender(data, stale){
-    if(token!==renderToken) return;  // stale — newer request in flight
+    if(token!==renderToken) return;
     activeCk     = ck;
     activePeriod = p;
     render(data, stale, p);
   }
 
-  // 1. Memory hit — instant
-  if(!force && mem[ck] && (Date.now()-mem[ck].ts)<MEM_TTL){
-    // Re-run norm() on cached data so UNIVS gets rebuilt correctly
+  // ── 1. Memory hit — render instantly, then silently refresh ──
+  if(!force && mem[ck]){
+    const age = Date.now() - mem[ck].ts;
     const normed = norm(JSON.parse(JSON.stringify(mem[ck].data)), p);
     safeRender(normed, true);
-    if(!isCustom) schedRefresh(ck,p,from,to,token);
+    // Background refresh if data is older than 5 min
+    if(age > PREFETCH_TTL){
+      setSt('⚡ Instant · refreshing…');
+      fetchOne(p,from,to).then(d=>{
+        if(!d||token!==renderToken) return;
+        mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
+        safeRender(d,false);
+        if(!isCustom) schedRefresh(ck,p,from,to,token);
+      }).catch(()=>{ setSt('⚡ Cached · background refresh failed'); });
+    } else {
+      setSt('⚡ Instant · live');
+      if(!isCustom) schedRefresh(ck,p,from,to,token);
+    }
     return;
   }
 
-  // 2. Disk hit — render immediately, refresh silently
+  // ── 2. Disk hit — render immediately, refresh silently ──
   const dk=dkRead(ck);
   if(dk){
     mem[ck]={data:dk.data,ts:dk.ts};
     safeRender(norm(JSON.parse(JSON.stringify(dk.data)), p), true);
     showDash();
+    setSt('⚡ Cached · refreshing…');
     fetchOne(p,from,to).then(d=>{
       if(!d||token!==renderToken) return;
       mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
       safeRender(d,false);
       if(!isCustom) schedRefresh(ck,p,from,to,token);
-    }).catch(()=>{});
+    }).catch(()=>{ setSt('⚡ Cached · refresh failed'); });
     return;
   }
 
-  // 3. Cold fetch
-  setSt('⚡ Fetching…');
+  // ── 3. Cold fetch (first ever load) ──
+  setSt('⏳ Loading…');
   try{
     const d=await fetchOne(p,from,to);
     if(token!==renderToken) return;
     if(!d){ setSt('⚠ No data'); showDash(); return; }
     mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
     safeRender(d,false);
+    // After first load, prefetch other tabs in background
+    setTimeout(prefetchAll, 800);
     if(!isCustom) schedRefresh(ck,p,from,to,token);
   }catch(e){
     if(token!==renderToken) return;
@@ -1415,48 +1471,50 @@ function schedRefresh(ck,p,from,to,token){
 }
 
 function prefetchAll(){
-  // Standard tabs
-  ['all','today','monthly'].forEach(p=>{
-    if(mem[p]) return;
+  // Pre-warm all standard tabs so switching is instant
+  const tabsToFetch = ['all','today','monthly'];
+  tabsToFetch.forEach(p=>{
+    // Skip if fresh in memory
+    if(mem[p] && (Date.now()-mem[p].ts)<PREFETCH_TTL) return;
+    // Use disk cache to populate memory — even if stale, still instant on click
     const dk=dkRead(p);
-    if(dk){ mem[p]={data:dk.data,ts:dk.ts}; return; }
+    if(dk){ mem[p]={data:dk.data,ts:dk.ts}; }
+    // Always fetch fresh in background to update cache
     fetchOne(p,null,null).then(d=>{
       if(!d) return;
       mem[p]={data:d,ts:Date.now()}; dkWrite(p,d);
-      if(activeCk===p) render(d,false,p);
     }).catch(()=>{});
   });
-  // This week — always pass explicit Mon–Sun dates
+
+  // This week
   {
     const n=new Date(); n.setHours(0,0,0,0);
     const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
     const wf=iso(wMon), wt=iso(wSun), wCk=`cr_${wf}_${wt}`;
-    if(!mem[wCk]){
+    if(!mem[wCk] || (Date.now()-mem[wCk].ts)>PREFETCH_TTL){
       const dk=dkRead(wCk);
-      if(dk){ mem[wCk]={data:dk.data,ts:dk.ts}; }
-      else {
-        fetchOne('weekly',wf,wt).then(d=>{
-          if(!d) return;
-          mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d);
-          if(activeCk===wCk) render(d,false,'weekly');
-        }).catch(()=>{});
-      }
+      if(dk) mem[wCk]={data:dk.data,ts:dk.ts};
+      fetchOne('weekly',wf,wt).then(d=>{
+        if(!d) return;
+        mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d);
+      }).catch(()=>{});
     }
   }
   // Last week
-  const n=new Date(); n.setHours(0,0,0,0);
-  const thisMon=monWeekStart(n);
-  const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
-  const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
-  const lf=iso(lMon), lt=iso(lSun), lwCk=`cr_${lf}_${lt}`;
-  if(!mem[lwCk]){
-    const dk=dkRead(lwCk);
-    if(dk){ mem[lwCk]={data:dk.data,ts:dk.ts}; return; }
-    fetchOne('lastweek',lf,lt).then(d=>{
-      if(!d) return;
-      mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d);
-      if(activeCk===lwCk) render(d,false,'lastweek');
-    }).catch(()=>{});
+  {
+    const n=new Date(); n.setHours(0,0,0,0);
+    const thisMon=monWeekStart(n);
+    const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
+    const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
+    const lf=iso(lMon), lt=iso(lSun), lwCk=`cr_${lf}_${lt}`;
+    if(!mem[lwCk] || (Date.now()-mem[lwCk].ts)>PREFETCH_TTL){
+      const dk=dkRead(lwCk);
+      if(dk) mem[lwCk]={data:dk.data,ts:dk.ts};
+      fetchOne('lastweek',lf,lt).then(d=>{
+        if(!d) return;
+        mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d);
+      }).catch(()=>{});
+    }
   }
 }
 
@@ -1552,8 +1610,8 @@ function render(d, stale, p){
   // ── Manager bars ───────────────────────────────────
   const sortedMgrs = [...MGRS].sort((a,b)=>(d[b.k]||0)-(d[a.k]||0));
   const maxMgr = Math.max(1, ...MGRS.map(m=>Math.max(d[m.k]||0, showTargets?tgtGet(m):0)));
-  // Clear dynamic el cache
-  MGRS.forEach((_,i)=>{ delete _elCache['mb'+i]; delete _elCache['mbt'+i]; });
+  // Clear only bar-specific cache entries (keep other cached els)
+  for(let i=0;i<20;i++){delete _elCache['mb'+i];delete _elCache['mbt'+i];delete _elCache['mba'+i];}
 
   // Show loading skeleton if no data yet (first load)
   if(net===0 && !d.trendRows){
@@ -1638,9 +1696,9 @@ function render(d, stale, p){
 
   // ── Timestamps ──────────────────────────────────────
   const ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  const staleTxt = stale ? '⚡ Cached · ' : '✓ Live · ';
+  const staleTxt = stale ? '⚡ ' : '✓ Live · ';
   ['t1','t2','t3'].forEach(id=>{ const e=$(id); if(e) e.textContent=staleTxt+ts; });
-  setSt(stale ? '⚡ Instant · refreshing in background' : '✅ Live data · refreshes in 5 min');
+  setSt(stale ? '⚡ Showing cached · updating in background' : '✅ Live data · auto-refresh in 30 min');
 
   // ── Bar animations — deferred ──
   requestAnimationFrame(()=>{
@@ -1673,12 +1731,12 @@ function render(d, stale, p){
   // ── Trend + Counsellor — deferred to after paint ───
   showDash();
   // Defer heavy chart renders until after browser paints manager bars
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      drawTrend(d.allTrendRows || d.trendRows || []);
-      drawCounsel(d.allTrendRows || d.trendRows || []);
-    });
-  });
+  // Defer charts by 2 frames — manager bars paint first
+  const _rows = d.allTrendRows || d.trendRows || [];
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    drawTrend(_rows);
+    drawCounsel(_rows);
+  }));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1739,7 +1797,11 @@ function ensureDonutSegments(){
   }
 }
 
+let _lastDonutHash = '';
 function updateDonut(d,rows){
+  const h=(d.netAdm||0)+'_'+(activeMgr||'')+'_'+(activeTL||'')+'_'+UNIVS.length;
+  if(h===_lastDonutHash && !activeMgr && !activeTL){ ensureDonutSegments(); return; }
+  _lastDonutHash=h;
   ensureDonutSegments();
   const UL=UNIVS.length;
   const uvArr=new Int32Array(UL); // typed — fastest accumulator
@@ -1956,7 +2018,11 @@ function fmtKey(k, mode){
   return String(day)+' '+moStr;                        // daily: DD Mon
 }
 
+let _lastTrendHash = '';
 function drawTrend(rows){
+  const h = rows.length+'_'+(rows[0]?.date||'')+'_'+(rows[rows.length-1]?.date||'');
+  if(h === _lastTrendHash) return; // no change
+  _lastTrendHash = h;
   const wrap=$('chartWrap'), svg=$('chartSvg'), tip=$('chartTip'), stats=$('trendStats');
   if(!rows.length){
     svg.innerHTML=`<text x="50%" y="50%" fill="rgba(255,255,255,.1)" text-anchor="middle" font-size="12" font-family="Plus Jakarta Sans">No trend data</text>`;
@@ -2195,6 +2261,9 @@ function drawIncLeaderboard(data){
 // ═══════════════════════════════════════════════════════
 // TABS
 // ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// TABS — instant from cache, silent background refresh
+// ═══════════════════════════════════════════════════════
 $q('.tabs').addEventListener('click',e=>{
   const t=e.target.closest('.tab');
   if(!t||t.classList.contains('on')) return;
@@ -2207,20 +2276,16 @@ $q('.tabs').addEventListener('click',e=>{
     const thisMon=monWeekStart(n);
     const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
     const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
-    delete mem['lastweek']; try{localStorage.removeItem(CACHE_KEY+'lastweek');}catch(e){}
+    // ✅ Do NOT delete cache — stale-while-revalidate shows instant data
     load('lastweek', iso(lMon), iso(lSun));
   } else if(p==='thisweek'){
     const n=new Date(); n.setHours(0,0,0,0);
     const wMon=monWeekStart(n);
     const wSun=sunWeekEnd(n);
-    // Clear cache so targets always refresh
-    delete mem['weekly']; try{localStorage.removeItem(CACHE_KEY+'weekly');}catch(e){}
+    // ✅ Do NOT delete cache — stale-while-revalidate
     load('weekly', iso(wMon), iso(wSun));
   } else {
-    // Clear cache for Month tab so targets always refresh
-    if(p==='monthly'){
-      delete mem['monthly']; try{localStorage.removeItem(CACHE_KEY+'monthly');}catch(e){}
-    }
+    // ✅ Do NOT delete cache for monthly — stale-while-revalidate
     load(p);
   }
 },{passive:true});
@@ -2397,29 +2462,53 @@ $('counselFilterX').addEventListener('click',()=>{
 // BOOT
 // ═══════════════════════════════════════════════════════
 (function boot(){
-  // Always show dashboard shell immediately
+  // Show shell immediately
   const ldr=$('ldr');
   if(ldr){ ldr.classList.add('out'); setTimeout(()=>{ ldr.style.display='none'; },150); }
   $('dash').style.display='block';
   shown=true;
 
-  // Try localStorage cache first — instant render
-  const dk=dkRead('all');
-  if(dk && dk.data){
-    try{
-      const nd=JSON.parse(JSON.stringify(dk.data));
-      mem['all']={data:nd,ts:dk.ts};
-      activeCk='all'; activePeriod='all';
-      render(nd, true, 'all');
-      setSt('⚡ Cached · refreshing…');
-      // Fresh cache (<10min): background refresh after 3s
-      const age=Date.now()-dk.ts;
-      setTimeout(()=>load('all'), age < 3*60000 ? 5000 : 1000);
-      return;
-    } catch(e){ /* cache corrupt — fall through to fetch */ }
+  // ── Pre-populate memory from disk for ALL tabs before rendering ──
+  // This makes every tab feel instant even before first fetch completes
+  const allKeys = ['all','today','monthly'];
+  allKeys.forEach(p=>{
+    if(!mem[p]){
+      const dk=dkRead(p);
+      if(dk) mem[p]={data:dk.data,ts:dk.ts};
+    }
+  });
+  // Pre-warm this week + last week from disk
+  {
+    const n=new Date(); n.setHours(0,0,0,0);
+    const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
+    const wCk=`cr_${iso(wMon)}_${iso(wSun)}`;
+    if(!mem[wCk]){ const dk=dkRead(wCk); if(dk) mem[wCk]={data:dk.data,ts:dk.ts}; }
+    const thisMon=monWeekStart(n);
+    const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
+    const lSun=new Date(lMon); lSun.setDate(lSun.getDate()+6);
+    const lwCk=`cr_${iso(lMon)}_${iso(lSun)}`;
+    if(!mem[lwCk]){ const dk=dkRead(lwCk); if(dk) mem[lwCk]={data:dk.data,ts:dk.ts}; }
   }
 
-  // No cache — fetch live data (skeletons visible while waiting)
+  // Try memory/disk cache for "all" — instant render
+  const dk=dkRead('all');
+  if(mem['all'] || dk){
+    const src=mem['all']||(()=>{mem['all']={data:dk.data,ts:dk.ts};return mem['all'];})();
+    try{
+      const nd2=JSON.parse(JSON.stringify(src.data));
+      activeCk='all'; activePeriod='all';
+      render(nd2, true, 'all');
+      setSt('⚡ Cached · refreshing…');
+      // Background refresh
+      const age=Date.now()-src.ts;
+      setTimeout(()=>load('all'), age < PREFETCH_TTL ? 3000 : 500);
+      // Prefetch other tabs after brief delay
+      setTimeout(prefetchAll, 1500);
+      return;
+    } catch(e){ /* corrupt — fall through */ }
+  }
+
+  // Cold start — fetch live
   setSt('⏳ Loading…');
   load('all');
 })();
