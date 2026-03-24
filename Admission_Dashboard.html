@@ -157,7 +157,22 @@ body::before{
   width:7px;height:7px;border-radius:50%;
   background:#10b981;box-shadow:0 0 6px rgba(16,185,129,.6);
   animation:pulse 2s infinite;
+  transition:background .3s ease, box-shadow .3s ease;
+  flex-shrink:0;
 }
+.live-dot.dot-live    { background:#10b981; box-shadow:0 0 6px rgba(16,185,129,.6); animation:pulse 2s infinite; }
+.live-dot.dot-cached  { background:#f59e0b; box-shadow:0 0 6px rgba(245,158,11,.4); animation:none; }
+.live-dot.dot-fetching{ background:#818cf8; box-shadow:0 0 6px rgba(129,140,248,.6); animation:fetchPulse .8s infinite; }
+.live-dot.dot-error   { background:#f87171; box-shadow:0 0 6px rgba(248,113,113,.5); animation:none; }
+@keyframes fetchPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* Smooth content transitions */
+#dash{transition:opacity .15s ease;}
+.card,.full-card{transition:box-shadow .25s ease,border-color .25s ease,opacity .2s ease;}
+
+/* Tab active indicator */
+.tab{position:relative;overflow:hidden;}
+.tab.on::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:2px;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
 .live-txt{font-size:11px;font-weight:600;color:rgba(255,255,255,.22);letter-spacing:.03em;}
 .kpis{display:flex;gap:8px;flex-wrap:wrap;}
@@ -737,32 +752,8 @@ body::before{
 /* Stat timestamp */
 .ts{font-size:10px;letter-spacing:.02em;opacity:.55;}
 
-/* ── Tab-switch smooth transition ──────────────────── */
-#mb, #tb, #tlist, #uleg, #cPodium, #cGrid, #incChart, #trendStats {
-  transition: opacity 0.15s ease;
-}
-#mb.switching, #tb.switching, #tlist.switching,
-#uleg.switching, #cPodium.switching, #cGrid.switching {
-  opacity: 0.55;
-}
-
-/* Fetching status pill — subtle, non-blocking */
-#stxt {
-  transition: color 0.2s ease;
-}
-
-/* Smooth KPI number transitions */
-#pnet, #ptot, #pcan {
-  transition: color 0.3s ease;
-}
-
-/* Tab active state — snappier feel */
-.tab {
-  transition: color .08s, background .08s;
-}
-.tab.on {
-  transition: none;
-}
+/* Smooth all transitions */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
 /* ── Skeleton loader ─────────────────────────────── */
 .skel-bar{
@@ -805,6 +796,120 @@ body::before{
 .card, .barlist, .leg { will-change: auto; }
 /* Smooth scrolling without jank */
 .dash-wrap { transform: translateZ(0); }
+
+/* ═══════════════════════════════════════════════════════
+   LOGIN OVERLAY
+═══════════════════════════════════════════════════════ */
+#loginModal{
+  position:fixed;inset:0;z-index:99999;
+  display:none;align-items:center;justify-content:center;
+  font-family:var(--font);
+}
+#loginModal.open{ display:flex !important; }
+.login-box{
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px;padding:40px 36px;
+  width:360px;max-width:calc(100vw - 40px);
+  box-shadow:0 24px 64px rgba(0,0,0,.6);
+  text-align:center;
+}
+.login-logo{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(145deg,#e8512a,#c93d1a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 20px;
+  box-shadow:0 4px 20px rgba(232,81,42,.45);
+}
+.login-title{
+  font-family:var(--font-display);font-size:22px;font-weight:800;
+  color:#fff;margin-bottom:4px;
+}
+.login-sub{
+  font-size:13px;color:rgba(255,255,255,.4);margin-bottom:28px;
+}
+.login-field{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:13px 16px;
+  width:100%;box-sizing:border-box;
+  font-family:var(--font);font-size:14px;font-weight:500;
+  color:#fff;outline:none;margin-bottom:12px;
+  transition:border-color .2s;
+}
+.login-field:focus{border-color:rgba(232,81,42,.6);}
+.login-field::placeholder{color:rgba(255,255,255,.25);}
+.login-btn{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#e8512a,#c93d1a);
+  color:#fff;font-family:var(--font);font-size:15px;font-weight:700;
+  cursor:pointer;margin-top:4px;
+  transition:opacity .2s,transform .15s;
+  box-shadow:0 4px 16px rgba(232,81,42,.4);
+}
+.login-btn:hover{opacity:.9;transform:translateY(-1px);}
+.login-btn:active{transform:translateY(0);}
+.login-error{
+  color:#f87171;font-size:12px;font-weight:600;
+  margin-top:8px;min-height:18px;
+}
+.login-role-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;
+  color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:20px;
+}
+/* Role-based visibility — default hidden, shown per role */
+#tlIncSection,
+#mgrIncSection {
+  display: none !important;
+}
+body.role-tl #tlIncSection {
+  display: block !important;
+}
+body.role-manager #tlIncSection,
+body.role-manager #mgrIncSection {
+  display: block !important;
+}
+/* User menu */
+.ava{ cursor:pointer; }
+.user-menu{
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:rgba(20,21,35,.96);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:8px;
+  min-width:200px;z-index:9999;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  display:none;
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+}
+.user-menu.open{display:block;}
+.user-menu-name{
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.9);
+  padding:8px 10px 4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.user-menu-role{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:0 10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:4px;
+  white-space:nowrap;
+}
+.user-menu-item{
+  padding:9px 10px;border-radius:8px;font-size:13px;font-weight:600;
+  color:rgba(255,255,255,.7);cursor:pointer;
+  transition:background .15s,color .15s;
+  display:flex;align-items:center;gap:8px;
+}
+.user-menu-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.user-menu-item.logout{color:#f87171;}
+.user-menu-item.logout:hover{background:rgba(248,113,113,.1);}
+.hd-right{position:relative;z-index:2000;}
+/* Ensure user menu is never clipped by parent overflow/contain */
+.wrap{contain:layout;}
+.topbar{overflow:visible;position:relative;z-index:100;}
 </style>
 </head>
 <body>
@@ -866,6 +971,23 @@ body::before{
 </div>
 
 <!-- DASHBOARD -->
+<!-- ═══ LOGIN MODAL ═══ -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;font-family:var(--font);">
+  <div class="login-box" style="position:relative;">
+    <button id="loginClose" style="position:absolute;top:14px;right:14px;background:none;border:none;color:rgba(255,255,255,.3);font-size:18px;cursor:pointer;line-height:1;padding:4px;">✕</button>
+    <div class="login-logo">🎓</div>
+    <div class="login-title">Sign In</div>
+    <div class="login-sub">Enter credentials for elevated access</div>
+    <input class="login-field" id="loginName" type="text" placeholder="Username" autocomplete="off" />
+    <input class="login-field" id="loginPin"  type="password" placeholder="PIN" autocomplete="off" />
+    <button class="login-btn" id="loginBtn">Sign In →</button>
+    <div class="login-error" id="loginError"></div>
+    <div style="margin-top:14px;font-size:11px;color:rgba(255,255,255,.25);text-align:center;">
+      Public access active by default
+    </div>
+  </div>
+</div>
+
 <div class="wrap" id="dash" style="display:none">
 
   <!-- TOPBAR -->
@@ -889,14 +1011,22 @@ body::before{
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Custom Range
       </button>
-      <div class="ava">V</div>
+      <div class="hd-right" style="position:relative;">
+        <div class="ava" id="avaBtn" title="Account"></div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-menu-name" id="menuName">Guest</div>
+          <div class="user-menu-role" id="menuRole">🔓 Public Access</div>
+          <div class="user-menu-item" id="menuLogin" style="color:rgba(100,200,255,.8);">🔐 Sign In for More Access</div>
+          <div class="user-menu-item logout" id="menuLogout" style="display:none;">🚪 Sign Out</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- STATUS BAR -->
   <div class="statusbar f1">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <div class="live-wrap"><div class="live-dot"></div><span class="live-txt" id="stxt">Connecting…</span></div>
+      <div class="live-wrap"><div class="live-dot dot-fetching" id="liveDot"></div><span class="live-txt" id="stxt">Connecting…</span></div>
       <div class="range-badge" id="rangeBadge">
         <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         <span id="rangeBadgeTxt"></span>
@@ -1011,12 +1141,36 @@ body::before{
     <div class="inc-section" id="incSection" style="display:none;">
       <div class="inc-head">
         <div>
-          <div class="inc-head-title">💰 Incentive Leaderboard</div>
+          <div class="inc-head-title">💰 Counsellor Incentive Leaderboard</div>
           <div class="inc-head-sub">Sorted by earnings</div>
         </div>
         <div class="inc-total-pill" id="incTotal"></div>
       </div>
       <div class="inc-chart" id="incChart"></div>
+    </div>
+
+    <!-- TL Incentive Leaderboard -->
+    <div class="inc-section" id="tlIncSection" style="display:none;">
+      <div class="inc-head">
+        <div>
+          <div class="inc-head-title" id="tlIncTitle">💰 Team Leader Incentive Leaderboard</div>
+          <div class="inc-head-sub">Sorted by TL earnings</div>
+        </div>
+        <div class="inc-total-pill" id="tlIncTotal"></div>
+      </div>
+      <div class="inc-chart" id="tlIncChart"></div>
+    </div>
+
+    <!-- Manager Incentive Leaderboard -->
+    <div class="inc-section" id="mgrIncSection" style="display:none;">
+      <div class="inc-head">
+        <div>
+          <div class="inc-head-title" id="mgrIncTitle">💰 Manager Incentive Leaderboard</div>
+          <div class="inc-head-sub">Sorted by manager earnings</div>
+        </div>
+        <div class="inc-total-pill" id="mgrIncTotal"></div>
+      </div>
+      <div class="inc-chart" id="mgrIncChart"></div>
     </div>
     <div class="ts-row" style="margin-top:12px;"><span class="ts-dot"></span>&nbsp;<span id="t5" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.16)">&#8212;</span></div>
   </div>
@@ -1029,12 +1183,14 @@ body::before{
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbwYS_Cbzj3gOjK2_e16qfRRCsIBsd7tcbFTQrBlOVfkXCbUkwJO_6T-Lp79w2QYWVim/exec';
-const CACHE_KEY  = 'hs_v2_';    // bumped to bust old short-TTL cache
-const MEM_TTL    = 30 * 60 * 1000; // 30 min memory cache — was 10
-const DISK_TTL   = 2  * 60 * 60 * 1000; // 2 hr disk cache — was 30 min
-const PREFETCH_TTL = 5 * 60 * 1000;  // re-prefetch after 5 min idle
-const RETRY_MS   = 20 * 1000;
+const API = 'https://script.google.com/macros/s/AKfycbxxTXQuTYerkXzRgUIq60-SslV_PnaEI19ajkAho9sOvWWs3_thF4qvEPguMnp3yV0Z/exec';
+const CACHE_KEY  = 'hs_v5_';
+const MEM_TTL    = 5 * 60 * 1000;   // 5 min — fresher background refresh
+const DISK_TTL   = 60 * 60 * 1000;  // 1 hr disk cache — survive long sessions
+const BG_REFRESH = 5 * 60 * 1000;   // background auto-refresh interval
+const RETRY_BASE = 10 * 1000;       // exponential backoff base (10s → 20s → 40s)
+const RETRY_MAX  = 5 * 60 * 1000;   // cap backoff at 5 min
+const FETCH_TIMEOUT = 15 * 1000;    // 15s fetch timeout
 const DONUT_C    = 238.8;
 
 // MGRS and TLS are built dynamically from sheet data
@@ -1056,7 +1212,7 @@ const INC_GRD  = ['linear-gradient(90deg,#7c2d12,#c2410c,#fb923c)','linear-gradi
 // ═══════════════════════════════════════════════════════
 const mem = Object.create(null);   // ck → {data, ts}
 let activeCk     = 'all';
-let activePeriod = 'all';          // human-readable period string
+let activePeriod = 'all';
 let customFrom   = null;
 let customTo     = null;
 let allCounselData = [];
@@ -1068,7 +1224,12 @@ let lastTrendRows = [];
 let refreshTimer  = null;
 let searchTimer   = null;
 let shown         = false;
-let renderToken   = 0;             // race-condition guard
+let renderToken   = 0;
+let _retryCount   = 0;             // exponential backoff counter
+let _lastFetchTs  = 0;             // when we last successfully fetched active tab
+let _isOnline     = navigator.onLine;
+let _pageVisible  = !document.hidden;
+let _prefetchDone = false;         // guard: only prefetch once
 
 // ═══════════════════════════════════════════════════════
 // DOM HELPERS
@@ -1087,16 +1248,50 @@ function fmtInc(n){
   return Math.round(n).toLocaleString('en-IN');
 }
 function nd(msg){ return`<div class="nodata"><div class="ico">📭</div><p>${msg}</p></div>`; }
-function setSt(t){ const e=$('stxt'); if(e){ if(t.includes('<')) e.innerHTML=t; else e.textContent=t; } }
-function setStLoading(){ setSt('⏳ Fetching data…'); }
 
-// Show a subtle non-blocking "refreshing" badge on status bar
-function setRefreshing(on){
-  const dot = document.querySelector('.live-dot');
-  if(!dot) return;
-  if(on){ dot.style.background='#f59e0b'; dot.style.boxShadow='0 0 6px rgba(245,158,11,.6)'; }
-  else   { dot.style.background=''; dot.style.boxShadow=''; }
+// ── Smart status bar ────────────────────────────────────
+// States: live | cached | fetching | error | offline
+let _stTimer = null;
+function setSt(state, extra){
+  const e = $('stxt');
+  const dot = $('liveDot');
+  if(!e) return;
+  clearTimeout(_stTimer);
+  const states = {
+    live:     { txt: 'Live',              dotCls: 'dot-live',    fade: true  },
+    cached:   { txt: extra||'Cached',     dotCls: 'dot-cached',  fade: false },
+    fetching: { txt: 'Updating…',         dotCls: 'dot-fetching',fade: false },
+    error:    { txt: extra||'Retry soon', dotCls: 'dot-error',   fade: false },
+    offline:  { txt: 'Offline — cached data shown', dotCls:'dot-error', fade: false },
+  };
+  const s = states[state] || { txt: state, dotCls:'dot-live', fade: false };
+  e.textContent = s.txt;
+  if(dot){
+    dot.className = 'live-dot ' + s.dotCls;
+  }
+  // Auto-clear fetching state after 30s (safety net)
+  if(state==='fetching'){
+    _stTimer = setTimeout(()=>setSt('cached','Stale · pull to refresh'), 30000);
+  }
 }
+function setStLoading(){ setSt('fetching'); }
+
+// Relative time formatter
+function relTime(ts){
+  const diff = Math.floor((Date.now()-ts)/1000);
+  if(diff < 60)  return 'just now';
+  if(diff < 120) return '1 min ago';
+  if(diff < 3600) return Math.floor(diff/60)+' min ago';
+  return Math.floor(diff/3600)+'h ago';
+}
+
+// Tick status every 30s to keep relative time fresh
+setInterval(()=>{
+  if(_lastFetchTs > 0){
+    const c = mem[activeCk];
+    if(c) setSt('live', relTime(c.ts));
+  }
+}, 30000);
 
 const _rgbaCache = Object.create(null);
 function rgba(hex,a){
@@ -1140,7 +1335,7 @@ function animCount(el, target){
 }
 
 // ═══════════════════════════════════════════════════════
-// DISK CACHE
+// DISK CACHE — IndexedDB-backed with localStorage fallback
 // ═══════════════════════════════════════════════════════
 function dkRead(k){
   try{
@@ -1151,36 +1346,34 @@ function dkRead(k){
     return o;
   }catch{ return null; }
 }
-// Defer disk writes to idle — never blocks the main thread
+
+// Write on idle — never blocks paint or interaction
 function dkWrite(k, data){
-  // Write immediately — don't defer, user may refresh before idle
-  try{
-    const save = {
-      netAdm:    data.netAdm,
-      totalAdm:  data.totalAdm,
-      cancelAdm: data.cancelAdm,
-      mgrTargets:    data.mgrTargets    || {},
-      mgrTargetsAll: data.mgrTargetsAll || {},
-      // Keep last 300 trendRows only (enough for all charts)
-      trendRows: (data.trendRows||[]).slice(-300),
-    };
-    // Copy all manager/TL/univ count keys
-    for(const key of Object.keys(data)){
-      if(!(key in save)) save[key] = data[key];
-    }
-    localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:save, ts:Date.now()}));
-  } catch(e){
-    // Storage full — clear all our keys and retry
+  const write = () => {
     try{
-      Object.keys(localStorage)
-        .filter(x=>x.startsWith(CACHE_KEY))
-        .forEach(x=>localStorage.removeItem(x));
-      localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:{
-        netAdm:data.netAdm||0, totalAdm:data.totalAdm||0, cancelAdm:data.cancelAdm||0,
-        trendRows:(data.trendRows||[]).slice(-100),
-        mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{}
-      }, ts:Date.now()}));
-    } catch{}
+      const save = {
+        netAdm:data.netAdm, totalAdm:data.totalAdm, cancelAdm:data.cancelAdm,
+        mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{},
+        trendRows:(data.trendRows||[]).slice(-300),
+      };
+      for(const key of Object.keys(data)){ if(!(key in save)) save[key]=data[key]; }
+      localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:save, ts:Date.now()}));
+    }catch(e){
+      try{
+        Object.keys(localStorage).filter(x=>x.startsWith(CACHE_KEY)).forEach(x=>localStorage.removeItem(x));
+        localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:{
+          netAdm:data.netAdm||0, totalAdm:data.totalAdm||0, cancelAdm:data.cancelAdm||0,
+          trendRows:(data.trendRows||[]).slice(-100),
+          mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{}
+        }, ts:Date.now()}));
+      }catch{}
+    }
+  };
+  // Use requestIdleCallback when available — zero main-thread impact
+  if(typeof requestIdleCallback !== 'undefined'){
+    requestIdleCallback(write, {timeout: 2000});
+  } else {
+    setTimeout(write, 100);
   }
 }
 
@@ -1359,164 +1552,213 @@ function norm(raw, p){
 }
 
 // ═══════════════════════════════════════════════════════
-// FETCH
+// FETCH — with timeout, dedup, and status tracking
 // ═══════════════════════════════════════════════════════
+const _inflight = Object.create(null); // dedup concurrent fetches for same key
+
 async function fetchOne(p, from, to){
-  let url=API+'?sheet='+encodeURIComponent(p);
-  if(from&&to) url+=`&from=${from}&to=${to}`;
-  const ctrl=new AbortController();
-  const tid=setTimeout(()=>ctrl.abort(),15000); // 15s timeout
-  setRefreshing(true);
-  try {
-    const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});
-    clearTimeout(tid);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const raw=await r.json();
-    setRefreshing(false);
-    return norm(raw,p);
-  } catch(e) {
-    clearTimeout(tid);
-    setRefreshing(false);
-    throw e;
-  }
+  const ck = from ? `cr_${from}_${to}` : p;
+
+  // Return existing in-flight promise for same key (dedup)
+  if(_inflight[ck]) return _inflight[ck];
+
+  let url = API+'?sheet='+encodeURIComponent(p);
+  if(from && to) url += `&from=${from}&to=${to}`;
+
+  const ctrl = new AbortController();
+  const tid  = setTimeout(()=>ctrl.abort(), FETCH_TIMEOUT);
+
+  const promise = fetch(url, {cache:'no-store', signal:ctrl.signal})
+    .then(r=>{ clearTimeout(tid); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(raw=>{ delete _inflight[ck]; _retryCount=0; return norm(raw,p); })
+    .catch(e=>{ clearTimeout(tid); delete _inflight[ck]; throw e; });
+
+  _inflight[ck] = promise;
+  return promise;
 }
 
 // ═══════════════════════════════════════════════════════
-// LOAD — race-safe, instant-from-cache
-// ═══════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════
-// LOAD — instant-from-cache + silent background refresh
-// Every tab click shows data immediately if any cache exists
+// LOAD — stale-while-revalidate, race-safe, backoff
 // ═══════════════════════════════════════════════════════
 async function load(p, from=null, to=null, force=false){
+  // Don't fetch if offline — use cache silently
+  if(!_isOnline && !force){
+    const ck2 = from ? `cr_${from}_${to}` : p;
+    const cached = mem[ck2] || (()=>{ const dk=dkRead(ck2); if(dk){ mem[ck2]={data:dk.data,ts:dk.ts}; return mem[ck2]; } return null; })();
+    if(cached){ activeCk=ck2; activePeriod=p; render(cached.data,true,p); setSt('offline'); return; }
+  }
+
   clearTimeout(refreshTimer);
-  const ck       = from?`cr_${from}_${to}`:p;
+  const ck       = from ? `cr_${from}_${to}` : p;
   const isCustom = !!from;
   const token    = ++renderToken;
 
   function safeRender(data, stale){
-    if(token!==renderToken) return;
+    if(token !== renderToken) return;
     activeCk     = ck;
     activePeriod = p;
     render(data, stale, p);
+    if(!stale){ _lastFetchTs=Date.now(); setSt('live', relTime(Date.now())); }
   }
 
-  // ── 1. Memory hit — render instantly, then silently refresh ──
-  if(!force && mem[ck]){
-    const age = Date.now() - mem[ck].ts;
+  // 1. Memory hit — instant, no flicker
+  if(!force && mem[ck] && (Date.now()-mem[ck].ts) < MEM_TTL){
     const normed = norm(JSON.parse(JSON.stringify(mem[ck].data)), p);
     safeRender(normed, true);
-    // Background refresh if data is older than 5 min
-    if(age > PREFETCH_TTL){
-      setSt('⚡ Instant · refreshing…');
-      fetchOne(p,from,to).then(d=>{
-        if(!d||token!==renderToken) return;
-        mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-        safeRender(d,false);
-        if(!isCustom) schedRefresh(ck,p,from,to,token);
-      }).catch(()=>{ setSt('⚡ Cached · background refresh failed'); });
-    } else {
-      setSt('⚡ Instant · live');
-      if(!isCustom) schedRefresh(ck,p,from,to,token);
-    }
+    setSt('cached', relTime(mem[ck].ts));
+    if(!isCustom) schedRefresh(ck, p, from, to, token);
     return;
   }
 
-  // ── 2. Disk hit — render immediately, refresh silently ──
-  const dk=dkRead(ck);
-  if(dk){
-    mem[ck]={data:dk.data,ts:dk.ts};
+  // 2. Disk hit — render instantly, silently revalidate in background
+  const dk = dkRead(ck);
+  if(dk && !force){
+    mem[ck] = {data:dk.data, ts:dk.ts};
     safeRender(norm(JSON.parse(JSON.stringify(dk.data)), p), true);
+    setSt('cached', relTime(dk.ts));
     showDash();
-    setSt('⚡ Cached · refreshing…');
-    fetchOne(p,from,to).then(d=>{
-      if(!d||token!==renderToken) return;
-      mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-      safeRender(d,false);
-      if(!isCustom) schedRefresh(ck,p,from,to,token);
-    }).catch(()=>{ setSt('⚡ Cached · refresh failed'); });
+    // Silent background refresh (no loading indicator)
+    fetchOne(p, from, to).then(d=>{
+      if(!d || token!==renderToken) return;
+      mem[ck]={data:d, ts:Date.now()}; dkWrite(ck, d);
+      safeRender(d, false);
+      if(!isCustom) schedRefresh(ck, p, from, to, token);
+    }).catch(()=>{ /* keep showing cached */ });
     return;
   }
 
-  // ── 3. Cold fetch (first ever load) ──
-  setSt('⏳ Loading…');
+  // 3. Cold fetch — show subtle indicator, not a full spinner
+  setSt('fetching');
   try{
-    const d=await fetchOne(p,from,to);
-    if(token!==renderToken) return;
-    if(!d){ setSt('⚠ No data'); showDash(); return; }
-    mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-    safeRender(d,false);
-    // After first load, prefetch other tabs in background
-    setTimeout(prefetchAll, 800);
-    if(!isCustom) schedRefresh(ck,p,from,to,token);
+    const d = await fetchOne(p, from, to);
+    if(token !== renderToken) return;
+    if(!d){ setSt('error','No data'); showDash(); return; }
+    mem[ck]={data:d, ts:Date.now()}; dkWrite(ck, d);
+    safeRender(d, false);
+    if(!isCustom) schedRefresh(ck, p, from, to, token);
+    // Prefetch other tabs after first successful load
+    if(!_prefetchDone){ _prefetchDone=true; setTimeout(prefetchAll, 2000); }
   }catch(e){
-    if(token!==renderToken) return;
-    setSt('⚠ Failed · retry 20s');
-    refreshTimer=setTimeout(()=>load(p,from,to,true),RETRY_MS);
+    if(token !== renderToken) return;
+    _retryCount++;
+    const delay = Math.min(RETRY_BASE * Math.pow(2, _retryCount-1), RETRY_MAX);
+    const secs  = Math.round(delay/1000);
+    setSt('error', `Retry in ${secs}s`);
+    refreshTimer = setTimeout(()=>load(p, from, to, true), delay);
     showDash();
   }
 }
 
-function schedRefresh(ck,p,from,to,token){
+function schedRefresh(ck, p, from, to, token){
   clearTimeout(refreshTimer);
-  refreshTimer=setTimeout(()=>{
-    if(renderToken!==token) return;
-    fetchOne(p,from,to).then(d=>{
-      if(!d||renderToken!==token) return;
-      mem[ck]={data:d,ts:Date.now()}; dkWrite(ck,d);
-      render(d,false,p);
-      schedRefresh(ck,p,from,to,token);
-    }).catch(()=>{ if(renderToken===token) schedRefresh(ck,p,from,to,token); });
-  }, MEM_TTL);
+  refreshTimer = setTimeout(()=>{
+    // Skip refresh if page hidden or offline — schedule again on focus/online
+    if(!_pageVisible || !_isOnline){ schedRefresh(ck,p,from,to,token); return; }
+    if(renderToken !== token) return;
+    setSt('fetching');
+    fetchOne(p, from, to).then(d=>{
+      if(!d || renderToken!==token) return;
+      mem[ck]={data:d, ts:Date.now()}; dkWrite(ck, d);
+      render(d, false, p);
+      _lastFetchTs = Date.now();
+      setSt('live', relTime(Date.now()));
+      schedRefresh(ck, p, from, to, token);
+    }).catch(()=>{
+      if(renderToken===token){
+        _retryCount++;
+        const delay = Math.min(RETRY_BASE * Math.pow(2, _retryCount-1), RETRY_MAX);
+        setSt('error','Retry soon');
+        refreshTimer = setTimeout(()=>schedRefresh(ck,p,from,to,token), delay);
+      }
+    });
+  }, BG_REFRESH);
 }
 
+// ═══════════════════════════════════════════════════════
+// PREFETCH — background warm-up of all tabs after first load
+// Uses idle time, respects network, never re-fetches fresh data
+// ═══════════════════════════════════════════════════════
 function prefetchAll(){
-  // Pre-warm all standard tabs so switching is instant
-  const tabsToFetch = ['all','today','monthly'];
-  tabsToFetch.forEach(p=>{
-    // Skip if fresh in memory
-    if(mem[p] && (Date.now()-mem[p].ts)<PREFETCH_TTL) return;
-    // Use disk cache to populate memory — even if stale, still instant on click
+  if(!_isOnline) return;
+  const tabs = ['all','today','monthly'];
+  let i = 0;
+  function next(){
+    if(i >= tabs.length) return;
+    const p = tabs[i++];
+    if(mem[p] && (Date.now()-mem[p].ts)<MEM_TTL){ next(); return; }
     const dk=dkRead(p);
-    if(dk){ mem[p]={data:dk.data,ts:dk.ts}; }
-    // Always fetch fresh in background to update cache
-    fetchOne(p,null,null).then(d=>{
-      if(!d) return;
-      mem[p]={data:d,ts:Date.now()}; dkWrite(p,d);
-    }).catch(()=>{});
-  });
-
-  // This week
-  {
-    const n=new Date(); n.setHours(0,0,0,0);
-    const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
-    const wf=iso(wMon), wt=iso(wSun), wCk=`cr_${wf}_${wt}`;
-    if(!mem[wCk] || (Date.now()-mem[wCk].ts)>PREFETCH_TTL){
-      const dk=dkRead(wCk);
-      if(dk) mem[wCk]={data:dk.data,ts:dk.ts};
-      fetchOne('weekly',wf,wt).then(d=>{
+    if(dk){ mem[p]={data:dk.data,ts:dk.ts}; next(); return; }
+    // Stagger fetches 1.5s apart to avoid hammering the API
+    setTimeout(()=>{
+      fetchOne(p,null,null).then(d=>{
         if(!d) return;
-        mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d);
-      }).catch(()=>{});
-    }
+        mem[p]={data:d,ts:Date.now()}; dkWrite(p,d);
+      }).catch(()=>{}).finally(next);
+    }, i * 1500);
   }
-  // Last week
-  {
-    const n=new Date(); n.setHours(0,0,0,0);
-    const thisMon=monWeekStart(n);
-    const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
-    const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
-    const lf=iso(lMon), lt=iso(lSun), lwCk=`cr_${lf}_${lt}`;
-    if(!mem[lwCk] || (Date.now()-mem[lwCk].ts)>PREFETCH_TTL){
-      const dk=dkRead(lwCk);
-      if(dk) mem[lwCk]={data:dk.data,ts:dk.ts};
-      fetchOne('lastweek',lf,lt).then(d=>{
-        if(!d) return;
-        mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d);
-      }).catch(()=>{});
-    }
+  next();
+
+  // Prefetch this week
+  const n=new Date(); n.setHours(0,0,0,0);
+  const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
+  const wf=iso(wMon), wt=iso(wSun), wCk=`cr_${wf}_${wt}`;
+  if(!mem[wCk]){
+    const dk=dkRead(wCk);
+    if(dk){ mem[wCk]={data:dk.data,ts:dk.ts}; }
+    else{ setTimeout(()=>fetchOne('weekly',wf,wt).then(d=>{ if(d){ mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d); } }).catch(()=>{}), 6000); }
+  }
+  // Prefetch last week
+  const thisMon=monWeekStart(n);
+  const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
+  const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
+  const lf=iso(lMon), lt=iso(lSun), lwCk=`cr_${lf}_${lt}`;
+  if(!mem[lwCk]){
+    const dk=dkRead(lwCk);
+    if(dk){ mem[lwCk]={data:dk.data,ts:dk.ts}; }
+    else{ setTimeout(()=>fetchOne('lastweek',lf,lt).then(d=>{ if(d){ mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d); } }).catch(()=>{}), 9000); }
   }
 }
+
+// ═══════════════════════════════════════════════════════
+// PAGE VISIBILITY + ONLINE/OFFLINE — Google-style
+// Pause refreshes when hidden, resume + re-fetch on return
+// ═══════════════════════════════════════════════════════
+document.addEventListener('visibilitychange', ()=>{
+  _pageVisible = !document.hidden;
+  if(_pageVisible && _isOnline && shown){
+    // User returned to tab — refresh if data is stale
+    const c = mem[activeCk];
+    const stale = !c || (Date.now()-c.ts) > MEM_TTL;
+    if(stale){
+      _retryCount = 0;
+      load(activePeriod,
+        activePeriod==='custom' ? customFrom : null,
+        activePeriod==='custom' ? customTo   : null
+      );
+    } else {
+      setSt('cached', relTime(c.ts));
+    }
+  }
+});
+
+window.addEventListener('online', ()=>{
+  _isOnline = true;
+  if(shown){
+    setSt('fetching');
+    _retryCount = 0;
+    load(activePeriod,
+      activePeriod==='custom' ? customFrom : null,
+      activePeriod==='custom' ? customTo   : null,
+      true
+    );
+  }
+});
+
+window.addEventListener('offline', ()=>{
+  _isOnline = false;
+  setSt('offline');
+  clearTimeout(refreshTimer);
+});
 
 // ═══════════════════════════════════════════════════════
 // RESOLVE TARGETS
@@ -1696,9 +1938,10 @@ function render(d, stale, p){
 
   // ── Timestamps ──────────────────────────────────────
   const ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  const staleTxt = stale ? '⚡ ' : '✓ Live · ';
+  const staleTxt = stale ? '⚡ ' : '✓ ';
   ['t1','t2','t3'].forEach(id=>{ const e=$(id); if(e) e.textContent=staleTxt+ts; });
-  setSt(stale ? '⚡ Showing cached · updating in background' : '✅ Live data · auto-refresh in 30 min');
+  if(!stale){ setSt('live', relTime(Date.now())); }
+  else { setSt('cached', relTime(mem[activeCk]?.ts||Date.now())); }
 
   // ── Bar animations — deferred ──
   requestAnimationFrame(()=>{
@@ -2187,15 +2430,9 @@ function buildCounselMap(rows){
     }
     if(!map[key]) map[key]={count:0,incentive:0};
     map[key].count++;
-    let inc=0;
-    const rkeys=Object.keys(r);
-    for(let j=0;j<rkeys.length;j++){
-      const kl=rkeys[j].toLowerCase();
-      if(kl.includes('incentive')||kl==='amount'||kl==='commission'){
-        const v=parseFloat(r[rkeys[j]]); if(!isNaN(v)&&v>0){inc=v;break;}
-      }
-    }
-    map[key].incentive+=inc;
+    // Use specifically the counsellor incentive field
+    const inc = parseFloat(r.incentive) || 0;
+    map[key].incentive += inc;
   }
   return Object.entries(map)
     .map(([name,{count,incentive}])=>({name,count,incentive}))
@@ -2224,6 +2461,95 @@ function drawCounsel(rows){
   }
   renderCounselSection(allCounselData,null);
   const t5=$('t5'); if(t5) t5.textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  // Draw TL and Manager incentive leaderboards
+  drawTLIncLeaderboard(rows);
+  drawMgrIncLeaderboard(rows);
+  // Re-enforce role visibility after all sections are drawn
+  applyRoleVisibility();
+}
+
+// Build TL incentive map from trendRows
+function buildTLIncMap(rows){
+  const map=Object.create(null);
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i];
+    const tl=(r.tl||'').toString().trim();
+    if(!tl) continue;
+    if(!map[tl]) map[tl]={name:tl,count:0,incentive:0};
+    map[tl].count++;
+    map[tl].incentive += parseFloat(r.tlIncentive)||0;
+  }
+  return Object.values(map).filter(x=>x.incentive>0).sort((a,b)=>b.incentive-a.incentive);
+}
+
+// Build Manager incentive map from trendRows
+function buildMgrIncMap(rows){
+  const map=Object.create(null);
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i];
+    const mgr=(r.mgr||'').toString().trim();
+    if(!mgr) continue;
+    if(!map[mgr]) map[mgr]={name:mgr,count:0,incentive:0};
+    map[mgr].count++;
+    map[mgr].incentive += parseFloat(r.mgrIncentive)||0;
+  }
+  return Object.values(map).filter(x=>x.incentive>0).sort((a,b)=>b.incentive-a.incentive);
+}
+
+function drawTLIncLeaderboard(rows){
+  const sec=$('tlIncSection'); if(!sec) return;
+  // Only show for TL or manager role — never for public
+  const role = currentUser ? currentUser.role : 'public';
+  if(role!=='tl' && role!=='manager'){ sec.style.setProperty('display','none','important'); return; }
+  const data=buildTLIncMap(rows);
+  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
+  sec.style.setProperty('display','block','important');
+  renderIncLeaderboard(data,'tlInc','Team Leader Incentive');
+}
+
+function drawMgrIncLeaderboard(rows){
+  const sec=$('mgrIncSection'); if(!sec) return;
+  // Only show for manager role — never for public or TL
+  const role = currentUser ? currentUser.role : 'public';
+  if(role!=='manager'){ sec.style.setProperty('display','none','important'); return; }
+  const data=buildMgrIncMap(rows);
+  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
+  sec.style.setProperty('display','block','important');
+  renderIncLeaderboard(data,'mgrInc','Manager Incentive');
+}
+
+function renderIncLeaderboard(data, prefix, title){
+  const section=$(prefix+'Section'); if(!section) return;
+  const total=data.reduce((s,x)=>s+x.incentive,0);
+  const maxInc=data[0].incentive;
+  const titleEl=$(prefix+'Title');
+  const totalEl=$(prefix+'Total');
+  const chartEl=$(prefix+'Chart');
+  if(titleEl) titleEl.textContent='💰 '+title+' Leaderboard';
+  if(totalEl) totalEl.textContent='₹'+fmtInc(total);
+
+  const rCls=['r1','r2','r3'], rIco=['🥇','🥈','🥉'];
+  let html='';
+  for(let i=0;i<data.length;i++){
+    const d=data[i];
+    const rc=i<3?rCls[i]:'rn', ri=i<3?rIco[i]:(i+1);
+    const grad=INC_GRD[i%INC_GRD.length];
+    html+=`<div class="inc-row">`;
+    html+=`<div class="inc-rank ${rc}">${ri}</div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions</span></div>`;
+    html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="${prefix}b${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${d.count} adm</span><span class="inc-ol-amt">₹${fmtInc(d.incentive)}</span></div></div>`;
+    html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(d.incentive)}</span><span class="inc-stat-adm">${d.count} adm</span></div>`;
+    html+=`</div>`;
+  }
+  if(chartEl) chartEl.innerHTML=html;
+
+  requestAnimationFrame(()=>{
+    for(let i=0;i<data.length;i++){const e=$f(prefix+'b'+i);if(e){e.style.transition='none';e.style.transform='scaleX(0)';}}
+    requestAnimationFrame(()=>{
+      for(let i=0;i<data.length;i++){const e=$f(prefix+'b'+i);if(e){e.style.transition='';e.style.transform=`scaleX(${data[i].incentive/maxInc})`;}}
+    });
+  });
 }
 
 function drawIncLeaderboard(data){
@@ -2261,9 +2587,6 @@ function drawIncLeaderboard(data){
 // ═══════════════════════════════════════════════════════
 // TABS
 // ═══════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════
-// TABS — instant from cache, silent background refresh
-// ═══════════════════════════════════════════════════════
 $q('.tabs').addEventListener('click',e=>{
   const t=e.target.closest('.tab');
   if(!t||t.classList.contains('on')) return;
@@ -2271,21 +2594,36 @@ $q('.tabs').addEventListener('click',e=>{
   t.classList.add('on');
   clearRange();
   const p=t.getAttribute('data-p');
+
+  // Smooth content fade-out → in on tab switch
+  const dash = $('dash');
+  dash.style.transition = 'opacity .12s ease';
+  dash.style.opacity = '0.6';
+  setTimeout(()=>{ dash.style.opacity='1'; }, 180);
+
   if(p==='lastweek'){
     const n=new Date(); n.setHours(0,0,0,0);
     const thisMon=monWeekStart(n);
     const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
     const lSun=new Date(lMon);    lSun.setDate(lSun.getDate()+6);
-    // ✅ Do NOT delete cache — stale-while-revalidate shows instant data
+    // Only clear cache if stale — don't force re-fetch on every click
+    const lwCk=`cr_${iso(lMon)}_${iso(lSun)}`;
+    const isStale = !mem[lwCk] || (Date.now()-mem[lwCk].ts)>MEM_TTL;
+    if(isStale){ delete mem['lastweek']; try{localStorage.removeItem(CACHE_KEY+'lastweek');}catch(e){} }
     load('lastweek', iso(lMon), iso(lSun));
   } else if(p==='thisweek'){
     const n=new Date(); n.setHours(0,0,0,0);
-    const wMon=monWeekStart(n);
-    const wSun=sunWeekEnd(n);
-    // ✅ Do NOT delete cache — stale-while-revalidate
+    const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
+    const wCk=`cr_${iso(wMon)}_${iso(wSun)}`;
+    const isStale = !mem[wCk] || (Date.now()-mem[wCk].ts)>MEM_TTL;
+    if(isStale){ delete mem['weekly']; try{localStorage.removeItem(CACHE_KEY+'weekly');}catch(e){} }
     load('weekly', iso(wMon), iso(wSun));
+  } else if(p==='monthly'){
+    // Only force-clear monthly cache if it's actually stale
+    const isStale = !mem['monthly'] || (Date.now()-mem['monthly'].ts)>MEM_TTL;
+    if(isStale){ delete mem['monthly']; try{localStorage.removeItem(CACHE_KEY+'monthly');}catch(e){} }
+    load(p);
   } else {
-    // ✅ Do NOT delete cache for monthly — stale-while-revalidate
     load(p);
   }
 },{passive:true});
@@ -2459,59 +2797,219 @@ $('counselFilterX').addEventListener('click',()=>{
 },{passive:true});
 
 // ═══════════════════════════════════════════════════════
+// AUTH & ROLE SYSTEM
+// ═══════════════════════════════════════════════════════
+
+// USERS CONFIG — add/remove users here
+// roles: 'admin' = sees everything | 'counsellor' = sees only own incentive
+const USERS = [
+  // Manager — sees ALL incentive data (counsellor + TL + manager)
+  { username:'manager', pin:'Mgr@2026', role:'manager' },
+
+  // Team Leader — sees counsellor + TL incentive (no manager incentive)
+  { username:'teamleader', pin:'TL@2026', role:'tl' },
+];
+// Public (no login) sees counsellor incentive only
+
+let currentUser = null; // { name, role }
+
+function authInit(){
+  // Attach login button events
+  const pinEl  = document.getElementById('loginPin');
+  const nameEl = document.getElementById('loginName');
+  const btnEl  = document.getElementById('loginBtn');
+  if(pinEl)  pinEl.addEventListener('keydown',  e=>{ if(e.key==='Enter') doLogin(); });
+  if(nameEl) nameEl.addEventListener('keydown', e=>{ if(e.key==='Enter') pinEl && pinEl.focus(); });
+  if(btnEl)  btnEl.addEventListener('click', doLogin);
+
+  // Check saved session
+  try{
+    const saved = sessionStorage.getItem('hs_user');
+    if(saved){
+      const u = JSON.parse(saved);
+      if(u && u.role){ applyLogin(u, true); return; }
+    }
+  }catch(e){}
+
+  // Default: public access (no login required)
+  applyLogin({ username:'public', role:'public' }, true);
+}
+
+function doLogin(){
+  const uRaw = (document.getElementById('loginName').value||'').trim().toLowerCase();
+  const pin  = (document.getElementById('loginPin').value||'').trim();
+  const errEl = document.getElementById('loginError');
+
+  if(!uRaw || !pin){ if(errEl) errEl.textContent='Enter username and PIN'; return; }
+
+  const user = USERS.find(u => u.username.toLowerCase()===uRaw && u.pin===pin);
+  if(!user){ if(errEl) errEl.textContent='Invalid username or PIN'; return; }
+
+  const u = { username:user.username, role:user.role };
+  try{ sessionStorage.setItem('hs_user', JSON.stringify(u)); }catch(e){}
+  closeLoginModal();
+  applyLogin(u, false);
+}
+
+function applyLogin(u, fromSession){
+  currentUser = u;
+
+  // Apply role class to body
+  document.body.classList.remove('role-public','role-tl','role-manager');
+  document.body.classList.add('role-'+u.role);
+
+  // Update avatar button label
+  const avaBtn = document.getElementById('avaBtn');
+  if(avaBtn){
+    const labels = { public:'👤', tl:'TL', manager:'MGR' };
+    avaBtn.textContent = labels[u.role]||'👤';
+  }
+  const menuName = document.getElementById('menuName');
+  if(menuName) menuName.textContent =
+    u.role==='manager' ? 'Manager' : u.role==='tl' ? 'Team Leader' : 'Guest';
+  const menuRole = document.getElementById('menuRole');
+  if(menuRole) menuRole.textContent =
+    u.role==='manager' ? '⚡ Full Access' :
+    u.role==='tl'      ? '👥 TL Access'  : '🔓 Public Access';
+
+  // Show/hide login vs logout menu items
+  const menuLogin  = document.getElementById('menuLogin');
+  const menuLogout = document.getElementById('menuLogout');
+  if(menuLogin)  menuLogin.style.display  = u.role==='public' ? '' : 'none';
+  if(menuLogout) menuLogout.style.display = u.role!=='public' ? '' : 'none';
+
+  // Boot dashboard if not already started
+  if(!shown) boot();
+  else {
+    // Dashboard already rendered — re-draw incentive sections with cached data
+    // so TL/Manager leaderboards populate immediately on login
+    applyRoleVisibility();
+    const c = mem[activeCk];
+    if(c && c.data){
+      const rows = c.data.allTrendRows || c.data.trendRows || [];
+      drawTLIncLeaderboard(rows);
+      drawMgrIncLeaderboard(rows);
+      // Re-enforce visibility after draws (draws may have re-hidden on empty data)
+      applyRoleVisibility();
+    }
+  }
+}
+
+function closeLoginModal(){
+  const m = document.getElementById('loginModal');
+  if(m) m.classList.remove('open');
+}
+
+function doLogout(){
+  try{ sessionStorage.removeItem('hs_user'); }catch(e){}
+  const menu = document.getElementById('userMenu');
+  if(menu) menu.classList.remove('open');
+  applyLogin({ username:'public', role:'public' }, false);
+}
+
+// Avatar menu toggle
+document.addEventListener('click', e=>{
+  // Logout — stop propagation so outside-click handler doesn't interfere
+  if(e.target.closest('#menuLogout')){
+    e.stopPropagation();
+    const menu=document.getElementById('userMenu');
+    if(menu) menu.classList.remove('open');
+    doLogout();
+    return;
+  }
+  // Login from menu
+  if(e.target.closest('#menuLogin')){
+    e.stopPropagation();
+    const menu=document.getElementById('userMenu');
+    if(menu) menu.classList.remove('open');
+    const m=document.getElementById('loginModal');
+    if(m){ m.classList.add('open'); setTimeout(()=>document.getElementById('loginName')?.focus(),100); }
+    return;
+  }
+  // Login modal close button
+  if(e.target.closest('#loginClose')){
+    const m=document.getElementById('loginModal');
+    if(m) m.classList.remove('open');
+    return;
+  }
+  // Click outside modal closes it
+  if(e.target.id==='loginModal'){
+    e.target.classList.remove('open');
+    return;
+  }
+
+  const btn = e.target.closest('#avaBtn');
+  const menu = document.getElementById('userMenu');
+
+  if(btn){
+    // Public role → open login modal
+    if(!currentUser || currentUser.role==='public'){
+      const m=document.getElementById('loginModal');
+      if(m){ m.classList.add('open'); document.getElementById('loginName')?.focus(); }
+      return;
+    }
+    // Logged in → show user menu
+    menu && menu.classList.toggle('open');
+    return;
+  }
+  if(!e.target.closest('#userMenu')) menu && menu.classList.remove('open');
+});
+
+// ── Role-based rendering ──────────────────────────────
+// Called after data loads — hides sections counsellors can't see
+function applyRoleVisibility(){
+  const role = currentUser ? currentUser.role : 'public';
+
+  // Access matrix:
+  // public  → counsellor only
+  // tl      → counsellor + TL
+  // manager → counsellor + TL + manager
+
+  const showTL  = (role==='tl'||role==='manager');
+  const showMGR = (role==='manager');
+
+  const tlSec  = document.getElementById('tlIncSection');
+  const mgrSec = document.getElementById('mgrIncSection');
+
+  // Force hide — override any display:block set by draw functions
+  if(tlSec)  tlSec.style.setProperty('display', showTL  ? 'block' : 'none', 'important');
+  if(mgrSec) mgrSec.style.setProperty('display', showMGR ? 'block' : 'none', 'important');
+}
+
+// ═══════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════
-(function boot(){
-  // Show shell immediately
+function boot(){
   const ldr=$('ldr');
   if(ldr){ ldr.classList.add('out'); setTimeout(()=>{ ldr.style.display='none'; },150); }
   $('dash').style.display='block';
   shown=true;
 
-  // ── Pre-populate memory from disk for ALL tabs before rendering ──
-  // This makes every tab feel instant even before first fetch completes
-  const allKeys = ['all','today','monthly'];
-  allKeys.forEach(p=>{
-    if(!mem[p]){
-      const dk=dkRead(p);
-      if(dk) mem[p]={data:dk.data,ts:dk.ts};
-    }
-  });
-  // Pre-warm this week + last week from disk
-  {
-    const n=new Date(); n.setHours(0,0,0,0);
-    const wMon=monWeekStart(n), wSun=sunWeekEnd(n);
-    const wCk=`cr_${iso(wMon)}_${iso(wSun)}`;
-    if(!mem[wCk]){ const dk=dkRead(wCk); if(dk) mem[wCk]={data:dk.data,ts:dk.ts}; }
-    const thisMon=monWeekStart(n);
-    const lMon=new Date(thisMon); lMon.setDate(lMon.getDate()-7);
-    const lSun=new Date(lMon); lSun.setDate(lSun.getDate()+6);
-    const lwCk=`cr_${iso(lMon)}_${iso(lSun)}`;
-    if(!mem[lwCk]){ const dk=dkRead(lwCk); if(dk) mem[lwCk]={data:dk.data,ts:dk.ts}; }
-  }
-
-  // Try memory/disk cache for "all" — instant render
+  // Try localStorage cache first — zero-latency render
   const dk=dkRead('all');
-  if(mem['all'] || dk){
-    const src=mem['all']||(()=>{mem['all']={data:dk.data,ts:dk.ts};return mem['all'];})();
+  if(dk && dk.data){
     try{
-      const nd2=JSON.parse(JSON.stringify(src.data));
+      const nd=JSON.parse(JSON.stringify(dk.data));
+      mem['all']={data:nd,ts:dk.ts};
       activeCk='all'; activePeriod='all';
-      render(nd2, true, 'all');
-      setSt('⚡ Cached · refreshing…');
-      // Background refresh
-      const age=Date.now()-src.ts;
-      setTimeout(()=>load('all'), age < PREFETCH_TTL ? 3000 : 500);
-      // Prefetch other tabs after brief delay
-      setTimeout(prefetchAll, 1500);
+      render(nd, true, 'all');
+      setSt('cached', relTime(dk.ts));
+      // Background refresh: immediately if stale >5min, else after 3s
+      const age=Date.now()-dk.ts;
+      const delay = age > MEM_TTL ? 500 : 3000;
+      setTimeout(()=>load('all'), delay);
+      // Prefetch all other tabs in idle time
+      setTimeout(()=>{ if(!_prefetchDone){ _prefetchDone=true; prefetchAll(); } }, delay+2000);
       return;
-    } catch(e){ /* corrupt — fall through */ }
+    }catch(e){ /* corrupt cache — fall through */ }
   }
 
-  // Cold start — fetch live
-  setSt('⏳ Loading…');
+  // No cache — cold fetch
+  setSt('fetching');
   load('all');
-})();
+}
+// Start auth flow
+authInit();
 </script>
 </body>
 </html>
